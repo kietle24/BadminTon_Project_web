@@ -64,19 +64,26 @@
     renderFooter();
 
     const params = new URLSearchParams(window.location.search);
-    const id = parseInt(params.get('id'));
-    const book = PRODUCTS.find(b => b.id === id);
+    let id = parseInt(params.get('id'));
 
-    if (!book) {
+    // Fallback: check sessionStorage if ?id not in URL (for file:// protocol)
+    if (!id || isNaN(id)) {
+      id = parseInt(sessionStorage.getItem('viewProductId'));
+      sessionStorage.removeItem('viewProductId'); // Clear after use
+    }
+
+    const product = PRODUCTS.find(p => p.id === id);
+
+    if (!product) {
       document.getElementById('book-content').innerHTML = `
       <div class="text-center py-5">
         <h3>Không tìm thấy sản phẩm</h3>
-        <a href="/categories" class="btn btn-primary mt-3">Quay lại cửa hàng</a>
+        <a href="#" onclick="event.preventDefault(); navigateTo('categories.html'); return false;" class="btn btn-primary mt-3">Quay lại cửa hàng</a>
       </div>`;
     } else {
-      document.title = `${book.title} - I-BAD Badminton Shop`;
-      document.getElementById('bc-title').textContent = book.title;
-      const discount = Math.round((1 - book.price / book.originalPrice) * 100);
+      document.title = `${product.title} - I-BAD Badminton Shop`;
+      document.getElementById('bc-title').textContent = product.title;
+      const discount = Math.round((1 - product.price / product.originalPrice) * 100);
 
       document.getElementById('book-content').innerHTML = `
       <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
@@ -84,22 +91,22 @@
           <div class="row g-4">
             <div class="col-md-4 text-center">
               <div class="position-relative d-inline-block">
-                <img src="${book.cover}" alt="${book.title}" class="img-fluid rounded-3 shadow" style="max-height:380px;object-fit:cover">
-                ${book.isNew ? '<span class="badge bg-success position-absolute top-0 start-0 m-2">MỚI</span>' : ''}
+                <img src="${product.cover}" alt="${product.title}" class="img-fluid rounded-3 shadow" style="max-height:380px;object-fit:cover">
+                ${product.isNew ? '<span class="badge bg-success position-absolute top-0 start-0 m-2">MỚI</span>' : ''}
                 ${discount > 0 ? `<span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2">-${discount}%</span>` : ''}
               </div>
             </div>
             <div class="col-md-8">
-              <small class="text-danger fw-bold">${book.brand}</small>
-              <h2 class="fw-bold mb-2">${book.title}</h2>
+              <small class="text-danger fw-bold">${product.brand}</small>
+              <h2 class="fw-bold mb-2">${product.title}</h2>
               <div class="d-flex align-items-center gap-3 mb-3 pb-3 border-bottom" style="font-size:0.9rem">
-                <span>Mã: <strong style="color:#333">${book.category}</strong></span>
-                <span class="text-warning">${renderStars(book.rating)} <strong>(${book.reviews})</strong></span>
+                <span>Mã: <strong style="color:#333">${product.category}</strong></span>
+                <span class="text-warning">${renderStars(product.rating)} <strong>(${product.reviews})</strong></span>
                 <span class="text-success"><i class="bi bi-check-circle"></i> Còn hàng</span>
               </div>
               <div class="mb-3">
-                <span class="fs-1 fw-bold text-danger">${formatPrice(book.price)}</span>
-                ${book.originalPrice > book.price ? `<span class="text-muted text-decoration-line-through ms-2">${formatPrice(book.originalPrice)}</span>` : ''}
+                <span class="fs-1 fw-bold text-danger">${formatPrice(product.price)}</span>
+                ${product.originalPrice > product.price ? `<span class="text-muted text-decoration-line-through ms-2">${formatPrice(product.originalPrice)}</span>` : ''}
                 ${discount > 0 ? `<span class="badge bg-danger ms-2">-${discount}%</span>` : ''}
               </div>
 
@@ -115,10 +122,10 @@
                 </ul>
               </div>
 
-              ${book.sizes ? `
+              ${product.sizes ? `
               <div class="mb-4">
                 <div class="d-flex flex-wrap gap-2" id="size-selector">
-                  ${book.sizes.map(size => `
+                  ${product.sizes.map(size => `
                     <label class="btn btn-outline-secondary btn-sm size-option" style="cursor:pointer;padding:8px 12px;border-radius:6px">
                       <input type="radio" name="size" value="${size}" style="cursor:pointer">
                       <span>${size}</span>
@@ -156,51 +163,51 @@
         <div class="p-4">
           <!-- Details Tab -->
           <div id="details" class="tab-content">
-            ${(book.category === 'Vợt Cầu Lông' || book.category === 'Giày Cầu Lông') && book.specs ? `
+            ${(product.category === 'Vợt Cầu Lông' || product.category === 'Giày Cầu Lông') && product.specs ? `
             <h5 style="color:#333;margin-bottom:15px"><strong>Thông Số Kỹ Thuật</strong></h5>
             <table class="table table-bordered">
               <tbody>
-                ${book.category === 'Vợt Cầu Lông' ? `
+                ${product.category === 'Vợt Cầu Lông' ? `
                 <tr style="background-color:#f8f9fa">
                   <td class="fw-bold" style="width:35%;color:#333;border-color:#ddd">Trình Độ Chơi</td>
-                  <td style="border-color:#ddd">${book.specs.level}</td>
+                  <td style="border-color:#ddd">${product.specs.level}</td>
                 </tr>
                 <tr>
                   <td class="fw-bold" style="color:#333;border-color:#ddd">Nội Dung Chơi</td>
-                  <td style="border-color:#ddd">${book.specs.playType}</td>
+                  <td style="border-color:#ddd">${product.specs.playType}</td>
                 </tr>
                 <tr style="background-color:#f8f9fa">
                   <td class="fw-bold" style="color:#333;border-color:#ddd">Phong Cách Chơi</td>
-                  <td style="border-color:#ddd">${book.specs.style}</td>
+                  <td style="border-color:#ddd">${product.specs.style}</td>
                 </tr>
                 <tr>
                   <td class="fw-bold" style="color:#333;border-color:#ddd">Độ Cứng Dây</td>
-                  <td style="border-color:#ddd">${book.specs.stringTension}</td>
+                  <td style="border-color:#ddd">${product.specs.stringTension}</td>
                 </tr>
                 <tr style="background-color:#f8f9fa">
                   <td class="fw-bold" style="color:#333;border-color:#ddd">Trọng Lượng</td>
-                  <td style="border-color:#ddd">${book.specs.weight}</td>
+                  <td style="border-color:#ddd">${product.specs.weight}</td>
                 </tr>
                 ` : `
                 <tr style="background-color:#f8f9fa">
                   <td class="fw-bold" style="width:35%;color:#333;border-color:#ddd">Chất Liệu</td>
-                  <td style="border-color:#ddd">${book.specs.material}</td>
+                  <td style="border-color:#ddd">${product.specs.material}</td>
                 </tr>
                 <tr>
                   <td class="fw-bold" style="color:#333;border-color:#ddd">Công Nghệ Đệm</td>
-                  <td style="border-color:#ddd">${book.specs.cushioning}</td>
+                  <td style="border-color:#ddd">${product.specs.cushioning}</td>
                 </tr>
                 <tr style="background-color:#f8f9fa">
                   <td class="fw-bold" style="color:#333;border-color:#ddd">Độ Bám Ggrip</td>
-                  <td style="border-color:#ddd">${book.specs.grip}</td>
+                  <td style="border-color:#ddd">${product.specs.grip}</td>
                 </tr>
                 <tr>
                   <td class="fw-bold" style="color:#333;border-color:#ddd">Phong Cách Chơi</td>
-                  <td style="border-color:#ddd">${book.specs.playStyle}</td>
+                  <td style="border-color:#ddd">${product.specs.playStyle}</td>
                 </tr>
                 <tr style="background-color:#f8f9fa">
                   <td class="fw-bold" style="color:#333;border-color:#ddd">Thoáng Khí</td>
-                  <td style="border-color:#ddd">${book.specs.breathability}</td>
+                  <td style="border-color:#ddd">${product.specs.breathability}</td>
                 </tr>
                 `}
               </tbody>
@@ -210,15 +217,15 @@
               <tbody>
                 <tr style="border-bottom:1px solid #eee">
                   <td class="fw-bold" style="width:30%;color:#333">Thương hiệu</td>
-                  <td>${book.brand}</td>
+                  <td>${product.brand}</td>
                 </tr>
                 <tr style="border-bottom:1px solid #eee">
                   <td class="fw-bold" style="color:#333">Loại sản phẩm</td>
-                  <td>${book.category}</td>
+                  <td>${product.category}</td>
                 </tr>
                 <tr style="border-bottom:1px solid #eee">
                   <td class="fw-bold" style="color:#333">Đánh giá</td>
-                  <td>${book.rating}/5.0 ⭐ (${book.reviews} đánh giá)</td>
+                  <td>${product.rating}/5.0 ⭐ (${product.reviews} đánh giá)</td>
                 </tr>
                 <tr style="border-bottom:1px solid #eee">
                   <td class="fw-bold" style="color:#333">Tình trạng</td>
@@ -226,7 +233,7 @@
                 </tr>
                 <tr>
                   <td class="fw-bold" style="color:#333">Giá</td>
-                  <td style="color:#ff6633;font-weight:bold">${formatPrice(book.price)}</td>
+                  <td style="color:#ff6633;font-weight:bold">${formatPrice(product.price)}</td>
                 </tr>
               </tbody>
             </table>
@@ -235,9 +242,9 @@
 
           <!-- Description Tab -->
           <div id="description" class="tab-content d-none">
-            ${book.category === 'Vợt Cầu Lông' ? `
+            ${product.category === 'Vợt Cầu Lông' ? `
             <p style="line-height:1.8;color:#555">
-              <strong>${book.title}</strong> là vợt cầu lông cao cấp từ thương hiệu <strong>${book.brand}</strong>, được thiết kế dành riêng cho các vận động viên chuyên nghiệp.
+              <strong>${product.title}</strong> là vợt cầu lông cao cấp từ thương hiệu <strong>${product.brand}</strong>, được thiết kế dành riêng cho các vận động viên chuyên nghiệp.
               Với công nghệ sợi carbon tiên tiến, vợt mang lại độ cứng vừa phải và sức mạnh đánh bóng vượt trội.
               Mặt vợt rộng với lực căng dây tối ưu, giúp tăng độ chính xác và tốc độ bóng lên tới 450km/h.
             </p>
@@ -251,9 +258,9 @@
               <li>✓ Độ bền cao, có thể sử dụng dài lâu mà không mất hiệu suất</li>
               <li>✓ Phù hợp cho cả đơn lẫn đôi, công thủ toàn diện</li>
             </ul>
-            ` : book.category === 'Giày Cầu Lông' ? `
+            ` : product.category === 'Giày Cầu Lông' ? `
             <p style="line-height:1.8;color:#555">
-              <strong>${book.title}</strong> của <strong>${book.brand}</strong> là giày cầu lông chuyên dụng, thiết kế đặc biệt cho những vận động viên cần sự ổn định tuyệt đối.
+              <strong>${product.title}</strong> của <strong>${product.brand}</strong> là giày cầu lông chuyên dụng, thiết kế đặc biệt cho những vận động viên cần sự ổn định tuyệt đối.
               Với công nghệ đệm khí nén và gót giày tạo hình, giày giúp giảm áp lực lên khớp gối khi di chuyển nhanh trên sân chứa.
               Đế giày chống trượt cao cấp cung cấp grip tối ưu trên mọi loại sân thi đấu.
             </p>
@@ -267,9 +274,9 @@
               <li>✓ Thiết kế thông thoáng, thoát mồ hôi hiệu quả</li>
               <li>✓ Phù hợp cho cả huấn luyện và thi đấu chuyên nghiệp</li>
             </ul>
-            ` : book.category === 'Áo Cầu Lông' ? `
+            ` : product.category === 'Áo Cầu Lông' ? `
             <p style="line-height:1.8;color:#555">
-              <strong>${book.title}</strong> của <strong>${book.brand}</strong> là áo cầu lông hiệu suất cao, được dệt từ chất liệu polyester cao cấp.
+              <strong>${product.title}</strong> của <strong>${product.brand}</strong> là áo cầu lông hiệu suất cao, được dệt từ chất liệu polyester cao cấp.
               Công nghệ quick-dry độc quyền giúp thoát mồ hôi nhanh, giữ cơ thể khô ráo suốt trận đấu.
               Thiết kế ôm cơ thể vừa vặn giúp tối ưu hóa sự di chuyển và giảm cảm giác nóng bức.
             </p>
@@ -283,9 +290,9 @@
               <li>✓ In ấn bền màu, không phai sau nhiều lần giặt</li>
               <li>✓ Thoải mái cho huấn luyện và thi đấu liên tục</li>
             </ul>
-            ` : book.category === 'Quần Cầu Lông' ? `
+            ` : product.category === 'Quần Cầu Lông' ? `
             <p style="line-height:1.8;color:#555">
-              <strong>${book.title}</strong> từ <strong>${book.brand}</strong> là quần cầu lông chuyên dụng, thiết kế tối ưu cho sự thoải mái tối đa.
+              <strong>${product.title}</strong> từ <strong>${product.brand}</strong> là quần cầu lông chuyên dụng, thiết kế tối ưu cho sự thoải mái tối đa.
               Chất liệu nylon mềm mại kết hợp công nghệ thoát mồ hôi giúp người chơi luôn khô thoáng và tự tin.
               Thiết kế có túi, tiện lợi cho cầu thủ mang những vật dụng cần thiết.
             </p>
@@ -299,9 +306,9 @@
               <li>✓ Có túi tiện dụng, đựng tất cả vật dụng cần thiết</li>
               <li>✓ Thoải mái cho cả luyện tập và thi đấu</li>
             </ul>
-            ` : book.category === 'Túi Cầu Lông' ? `
+            ` : product.category === 'Túi Cầu Lông' ? `
             <p style="line-height:1.8;color:#555">
-              <strong>${book.title}</strong> của <strong>${book.brand}</strong> là túi cầu lông thiết kế đặc biệt, có thể chứa khoảng 2-4 chiếc vợt cùng lúc.
+              <strong>${product.title}</strong> của <strong>${product.brand}</strong> là túi cầu lông thiết kế đặc biệt, có thể chứa khoảng 2-4 chiếc vợt cùng lúc.
               Vải chống thấm nước cao cấp bảo vệ vợt khỏi tác động và các tác nhân môi trường.
               Thiết kế ngăn chia chi tiết giúp sắp xếp gọn gàng các vật dụng cầu lông.
             </p>
@@ -317,7 +324,7 @@
             </ul>
             ` : `
             <p style="line-height:1.8;color:#555">
-              <strong>${book.title}</strong> của <strong>${book.brand}</strong> là phụ kiện cầu lông chất lượng cao, được chọn lọc kỹ lưỡng.
+              <strong>${product.title}</strong> của <strong>${product.brand}</strong> là phụ kiện cầu lông chất lượng cao, được chọn lọc kỹ lưỡng.
               Sản phẩm này giúp nâng cao trải nghiệm chơi cầu lông của bạn với tính năng chuyên dụng và thiết kế tối ưu.
               Phù hợp cho cả người mới bắt đầu lẫn vận động viên chuyên nghiệp.
             </p>
@@ -336,14 +343,14 @@
         </div>
       </div>`;
 
-      const related = PRODUCTS.filter(b => b.category === book.category && b.id !== book.id).slice(0, 4);
+      const related = PRODUCTS.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
       if (related.length > 0) {
         document.getElementById('related-section').classList.remove('d-none');
-        document.getElementById('related-books').innerHTML = related.map(b => renderBookCard(b)).join('');
+        document.getElementById('related-books').innerHTML = related.map(p => renderProductCard(p)).join('');
       }
 
       // Event listeners for size selection
-      if (book.sizes) {
+      if (product.sizes) {
         const sizeOptions = document.querySelectorAll('.size-option input[type="radio"]');
         sizeOptions.forEach(option => {
           option.addEventListener('change', (e) => {
@@ -402,7 +409,7 @@
 
       if (buyNowBtn) {
         buyNowBtn.addEventListener('click', () => {
-          if (book.sizes && !document.getElementById('selected-size').value) {
+          if (product.sizes && !document.getElementById('selected-size').value) {
             alert('Vui lòng chọn size sản phẩm');
             return;
           }
@@ -410,22 +417,22 @@
           const size = document.getElementById('selected-size')?.value || null;
           for (let i = 0; i < qty; i++) {
             Cart.addItem({
-              id: book.id,
-              title: book.title,
-              brand: book.brand,
-              price: book.price,
-              cover: book.cover,
+              id: product.id,
+              title: product.title,
+              brand: product.brand,
+              price: product.price,
+              cover: product.cover,
               size: size
             });
           }
           Cart.updateBadge();
-          window.location.href = 'checkout.html';
+          navigateTo('checkout.html');
         });
       }
 
       if (addToCartBtn) {
         addToCartBtn.addEventListener('click', () => {
-          if (book.sizes && !document.getElementById('selected-size').value) {
+          if (product.sizes && !document.getElementById('selected-size').value) {
             alert('Vui lòng chọn size sản phẩm');
             return;
           }
@@ -433,18 +440,18 @@
           const size = document.getElementById('selected-size')?.value || null;
           for (let i = 0; i < qty; i++) {
             Cart.addItem({
-              id: book.id,
-              title: book.title,
-              brand: book.brand,
-              price: book.price,
-              cover: book.cover,
+              id: product.id,
+              title: product.title,
+              brand: product.brand,
+              price: product.price,
+              cover: product.cover,
               size: size
             });
           }
           Cart.updateBadge();
           alert(`Đã thêm ${qty} sản phẩm vào giỏ hàng`);
           qtyInput.value = 1;
-          if (book.sizes) {
+          if (product.sizes) {
             document.querySelectorAll('.size-option').forEach(btn => {
               btn.style.backgroundColor = '';
               btn.style.borderColor = '';

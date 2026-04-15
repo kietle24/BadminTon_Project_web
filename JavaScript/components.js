@@ -1,6 +1,12 @@
 
 function renderNavbar(activePage) {
   const isActive = (key) => activePage === key ? 'active-page' : '';
+  const basePath = getBasePath();
+  const homeLink = basePath === '.' ? './index.html' : '/HTML/index.html';
+  const accountLink = basePath === '.' ? './account.html' : '/HTML/account.html';
+  const cartLink = basePath === '.' ? './cart.html' : '/HTML/cart.html';
+  const categoriesLink = basePath === '.' ? './categories.html' : '/HTML/categories.html';
+  const contactLink = basePath === '.' ? './contact.html' : '/HTML/contact.html';
 
   document.getElementById('navbar-placeholder').innerHTML = `
     <header class="header">
@@ -20,7 +26,7 @@ function renderNavbar(activePage) {
           <div class="d-flex align-items-center justify-content-between w-100 gap-3 gap-lg-4">
             <!-- Logo -->
             <div class="flex-shrink-0">
-              <a href="/" class="navbar-brand d-inline-block text-decoration-none">
+              <a href="${homeLink}" class="navbar-brand d-inline-block text-decoration-none">
                 <img src="../IMG/logo1.png" alt="I-BAD Badminton Shop" style="max-height: 50px; width: auto;">
               </a>
             </div>
@@ -37,10 +43,10 @@ function renderNavbar(activePage) {
 
             <!-- Right Actions -->
             <div class="d-flex justify-content-end gap-2 gap-lg-4 align-items-center flex-shrink-0">
-              <a href="/account" class="text-dark text-decoration-none d-flex flex-column align-items-center" style="font-size:12px; gap:3px;">
+              <a href="${accountLink}" class="text-dark text-decoration-none d-flex flex-column align-items-center" style="font-size:12px; gap:3px;">
                 <i class="bi bi-person fs-5"></i> <span class="d-none d-lg-inline">Tài khoản</span>
               </a>
-              <a href="/cart" class="text-dark text-decoration-none d-flex flex-column align-items-center position-relative" style="font-size:12px; gap:3px;">
+              <a href="${cartLink}" class="text-dark text-decoration-none d-flex flex-column align-items-center position-relative" style="font-size:12px; gap:3px;">
                 <i class="bi bi-cart3 fs-5"></i>
                 <span id="cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:10px; display:none;">0</span>
                 <span class="d-none d-lg-inline">Giỏ hàng</span>
@@ -55,25 +61,25 @@ function renderNavbar(activePage) {
         <div class="container">
           <ul class="nav justify-content-center py-2 flex-wrap" style="gap: 0;">
             <li class="nav-item">
-              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="/categories?cat=Vợt+Cầu+Lông" style="font-size:13px; border-right: 1px solid rgba(255,255,255,0.2);">Vợt Cầu Lông</a>
+              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="${categoriesLink}?cat=Vợt+Cầu+Lông" style="font-size:13px; border-right: 1px solid rgba(255,255,255,0.2);">Vợt Cầu Lông</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="/categories?cat=Giày+Cầu+Lông" style="font-size:13px; border-right: 1px solid rgba(255,255,255,0.2);">Giày Cầu Lông</a>
+              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="${categoriesLink}?cat=Giày+Cầu+Lông" style="font-size:13px; border-right: 1px solid rgba(255,255,255,0.2);">Giày Cầu Lông</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="/categories?cat=Áo+Cầu+Lông" style="font-size:13px; border-right: 1px solid rgba(255,255,255,0.2);">Áo Cầu Lông</a>
+              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="${categoriesLink}?cat=Áo+Cầu+Lông" style="font-size:13px; border-right: 1px solid rgba(255,255,255,0.2);">Áo Cầu Lông</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="/categories?cat=Quần+Cầu+Lông" style="font-size:13px; border-right: 1px solid rgba(255,255,255,0.2);">Quần Cầu Lông</a>
+              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="${categoriesLink}?cat=Quần+Cầu+Lông" style="font-size:13px; border-right: 1px solid rgba(255,255,255,0.2);">Quần Cầu Lông</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="/categories?cat=Túi+Cầu+Lông" style="font-size:13px; border-right: 1px solid rgba(255,255,255,0.2);">Túi Cầu Lông</a>
+              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="${categoriesLink}?cat=Túi+Cầu+Lông" style="font-size:13px; border-right: 1px solid rgba(255,255,255,0.2);">Túi Cầu Lông</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="/categories?cat=Phụ+Kiện" style="font-size:13px; border-right: 1px solid rgba(255,255,255,0.2);">Phụ Kiện</a>
+              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="${categoriesLink}?cat=Phụ+Kiện" style="font-size:13px; border-right: 1px solid rgba(255,255,255,0.2);">Phụ Kiện</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="/contact" style="font-size:13px;">Liên Hệ</a>
+              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="${contactLink}" style="font-size:13px;">Liên Hệ</a>
             </li>
           </ul>
         </div>
@@ -96,7 +102,11 @@ function renderFooter() {
 function handleSearch(e) {
   e.preventDefault();
   const q = document.getElementById('navbar-search').value.trim();
-  if (q) window.location.href = `/categories?search=${encodeURIComponent(q)}`;
+  if (q) {
+    const basePath = getBasePath();
+    const categoriesLink = basePath === '.' ? './categories.html' : '/HTML/categories.html';
+    window.location.href = `${categoriesLink}?search=${encodeURIComponent(q)}`;
+  }
 }
 
 // Global Add to Cart Handler - Available to all pages
@@ -150,30 +160,63 @@ function renderStars(rating) {
   return stars;
 }
 
+// Helper function to get base path based on protocol
+function getBasePath() {
+  const isFileProtocol = window.location.protocol === 'file:';
+  return isFileProtocol ? '.' : '';
+}
+
+// Helper function to navigate pages
+function navigateTo(path) {
+  const basePath = getBasePath();
+  if (basePath === '.') {
+    // File protocol: use relative paths
+    window.location.href = './' + path.replace(/^\/HTML\//, '').replace(/^\//, '');
+  } else {
+    // Vercel/HTTP: use HTML paths
+    const htmlPath = path.includes('.html') ? path : path + '.html';
+    window.location.href = '/HTML/' + htmlPath.replace(/^\/HTML\//, '').replace(/^\//, '');
+  }
+}
+
+// Helper function to navigate to product detail
+function navigateToProduct(productId) {
+  // Store in sessionStorage for fallback (works on file:// protocol)
+  sessionStorage.setItem('viewProductId', productId);
+
+  // Determine the correct URL based on current protocol
+  const basePath = getBasePath();
+  const detailUrl = basePath === '.'
+    ? './products-detail.html?id=' + productId
+    : '/HTML/products-detail.html?id=' + productId;
+
+  window.location.href = detailUrl;
+}
+
 // Render a product card (reference b-card style with overlay tools)
-function renderBookCard(b) {
-  const discount = Math.round((1 - b.price / b.originalPrice) * 100);
-  const productData = { id: b.id, title: b.title, brand: b.brand, price: b.price, cover: b.cover };
+function renderProductCard(product) {
+  const discount = Math.round((1 - product.price / product.originalPrice) * 100);
+  const productData = { id: product.id, title: product.title, brand: product.brand, price: product.price, cover: product.cover };
   return `
     <div class="col">
-      <a href="/products/${b.id}" class="text-decoration-none">
+      <a href="#" onclick="event.preventDefault(); navigateToProduct(${product.id})" class="text-decoration-none">
         <div class="card b-card" style="cursor:pointer;transition:transform 0.2s;height:100%">
           <div class="img-wrapper position-relative">
-            <img src="${b.cover}" alt="${b.title}">
-            ${b.isNew ? '<span class="badge bg-success" style="position:absolute; top:10px; left:10px;">MỚI</span>' : ''}
-            ${b.isBestSeller ? '<span class="badge bg-danger" style="position:absolute; top:10px; right:10px;">BÁN CHẠY</span>' : ''}
+            <img src="${product.cover}" alt="${product.title}">
+            ${product.isNew ? '<span class="badge bg-success" style="position:absolute; top:10px; left:10px;">MỚI</span>' : ''}
+            ${product.isBestSeller ? '<span class="badge bg-danger" style="position:absolute; top:10px; right:10px;">BÁN CHẠY</span>' : ''}
             ${discount > 0 ? `<span class="badge bg-warning text-dark" style="position:absolute; top:10px; left:50%; transform:translateX(-50%);">-${discount}%</span>` : ''}
           </div>
           <div class="card-body text-center d-flex flex-column justify-content-between">
             <div>
-              <small class="text-danger fw-bold">${b.brand}</small>
-              <h6 class="fw-bold mt-2 mb-1" style="font-size:0.95rem">${b.title}</h6>
+              <small class="text-danger fw-bold">${product.brand}</small>
+              <h6 class="fw-bold mt-2 mb-1" style="font-size:0.95rem">${product.title}</h6>
               <div class="text-warning mb-1" style="font-size:0.85rem;">
-                ${renderStars(b.rating)} <strong>(${b.rating})</strong>
+                ${renderStars(product.rating)} <strong>(${product.rating})</strong>
               </div>
               <div class="mt-3 mb-3">
-                <div class="fw-bold text-danger" style="font-size:1.1rem">${formatPrice(b.price)}</div>
-                ${b.originalPrice > b.price ? `<small class="text-muted text-decoration-line-through">${formatPrice(b.originalPrice)}</small>` : ''}
+                <div class="fw-bold text-danger" style="font-size:1.1rem">${formatPrice(product.price)}</div>
+                ${product.originalPrice > product.price ? `<small class="text-muted text-decoration-line-through">${formatPrice(product.originalPrice)}</small>` : ''}
               </div>
             </div>
             <button type="button" class="btn btn-custom-primary w-100" onclick='event.preventDefault();event.stopPropagation();addToCartHandler(${JSON.stringify(productData).replace(/'/g, "&#39;")})' >
@@ -186,5 +229,5 @@ function renderBookCard(b) {
   `;
 }
 
-// Alias for consistency
-const renderProductCard = renderBookCard;
+// Alias for backwards compatibility
+const renderBookCard = renderProductCard;

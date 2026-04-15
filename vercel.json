@@ -19,10 +19,6 @@
             "destination": "/HTML/categories.html"
         },
         {
-            "source": "/products/:id",
-            "destination": "/HTML/products-detail.html"
-        },
-        {
             "source": "/contact",
             "destination": "/HTML/contact.html"
         },
