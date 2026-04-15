@@ -169,14 +169,19 @@ function getBasePath() {
 // Helper function to navigate pages
 function navigateTo(path) {
   const basePath = getBasePath();
+  let url;
+
   if (basePath === '.') {
     // File protocol: use relative paths
-    window.location.href = './' + path.replace(/^\/HTML\//, '').replace(/^\//, '');
+    url = './' + path.replace(/^\/HTML\//, '').replace(/^\//, '');
   } else {
-    // Vercel/HTTP: use HTML paths
-    const htmlPath = path.includes('.html') ? path : path + '.html';
-    window.location.href = '/HTML/' + htmlPath.replace(/^\/HTML\//, '').replace(/^\//, '');
+    // HTTP/Vercel: use HTML paths
+    const cleanPath = path.replace(/^\/HTML\//, '').replace(/^\//, '');
+    url = '/HTML/' + cleanPath;
   }
+
+  console.log('Navigating to:', url);
+  window.location.href = url;
 }
 
 // Helper function to navigate to product detail
