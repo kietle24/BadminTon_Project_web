@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="vi">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
@@ -11,16 +11,22 @@
 </head>
 
 <body>
+  <!-- ===== NAVBAR ===== -->
   <div id="navbar-placeholder"></div>
 
   <div class="container py-4">
     <div class="row g-4">
+      <!-- ===== PHẦN 1: SIDEBAR BỘ LỌC (TRÁI) ===== -->
       <div class="col-lg-3">
         <div class="card border-0 shadow-sm rounded-3 sticky-top" style="top: 76px">
           <div class="card-body filter-sidebar">
+            <!-- BỘ LỌC THEO DANH MỤC -->
             <h6 class="fw-bold mb-3">Danh mục</h6>
             <div class="category-filter-group" id="cat-filter"></div>
+
             <hr class="my-4" />
+
+            <!-- BỘ LỌC THEO GIÁ -->
             <h6 class="fw-bold mb-3">Giá</h6>
             <div class="price-filter">
               <div class="form-check">
@@ -59,6 +65,8 @@
                 </label>
               </div>
             </div>
+
+            <!-- NÚT ĐẶT LẠI BỘ LỌC -->
             <button class="btn btn-sm btn-outline-danger w-100 mt-3" onclick="resetFilters()">
               <i class="bi bi-x-circle"></i> Xóa bộ lọc
             </button>
@@ -66,17 +74,24 @@
         </div>
       </div>
 
+      <!-- ===== PHẦN 2: DANH SÁCH SẢN PHẨM (PHẢI) ===== -->
       <div class="col-lg-9">
+        <!-- THANH CÔNG CỤ: HIỂN THỊ SỐ KẾT QUẢ, SẮPXẾP, CHUYỂN ĐỘ XEM -->
         <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+          <!-- Số lượng kết quả -->
           <span class="text-muted small" id="result-count">0 kết quả</span>
+
           <div class="d-flex gap-2 align-items-center">
-            <select class="form-select form-select-sm" id="sort-select" style="width: auto" onchange="renderBooks()">
+            <!-- Dropdown sắp xếp -->
+            <select class="form-select form-select-sm" id="sort-select" style="width: auto" onchange="renderProducts()">
               <option value="default">Mặc định</option>
               <option value="newest">Mới nhất</option>
               <option value="price-asc">Giá tăng dần</option>
               <option value="price-desc">Giá giảm dần</option>
               <option value="rating">Đánh giá cao</option>
             </select>
+
+            <!-- Nút chuyển đổi chế độ xem (lưới/danh sách) -->
             <div class="btn-group btn-group-sm">
               <button class="btn btn-custom-primary" id="btn-grid" onclick="setView('grid')">
                 <i class="bi bi-grid"></i>
@@ -87,7 +102,11 @@
             </div>
           </div>
         </div>
-        <div id="books-grid" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4"></div>
+
+        <!-- CONTAINER HIỂN THỊ SẢN PHẨM -->
+        <div id="products-grid" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4"></div>
+
+        <!-- THÔNG BÁO TRỐNG (ẨN NẾU CÓ SẢN PHẨM) -->
         <div id="empty-msg" class="text-center py-5 d-none">
           <p class="text-muted mt-2">Không tìm thấy sản phẩm nào phù hợp</p>
         </div>
@@ -95,26 +114,32 @@
     </div>
   </div>
 
+  <!-- ===== FOOTER ===== -->
   <div id="footer-placeholder"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../JavaScript/products.js"></script>
   <script src="../JavaScript/cart.js"></script>
   <script src="../JavaScript/components.js"></script>
+
+  <!-- ===== DANH MỤC SẢN PHẨM - MAIN SCRIPT ===== -->
   <script>
+    // PHẦN 1: KHỞI TẠO NAVBAR VÀ FOOTER
     renderNavbar("categories");
     renderFooter();
 
+    // PHẦN 2: KHÁ I BÁO VÀ BIẾN TOÀN CỤC
     const params = new URLSearchParams(window.location.search);
-    let selectedCat = params.get("cat") || "Tất cả";
-    let selectedPrice = "all";
-    let viewMode = "grid";
+    let selectedCat = params.get("cat") || "Tất cả";  // Danh mục được chọn
+    let selectedPrice = "all";                         // Giá được chọn
+    let viewMode = "grid";                             // Chế độ xem (grid/list)
 
+    // PHẦN 3: TẠO DANH SÁCH DANH MỤC TỪ PRODUCTS.JS
     const CATS = ["Tất cả", ...new Set(PRODUCTS.map((b) => b.category))];
 
     const catFilter = document.getElementById("cat-filter");
 
-    // Create radio buttons for categories
+    // PHẦN 4: TẠO RADIO BUTTON CHO DANH MỤC
     CATS.forEach((cat) => {
       const div = document.createElement("div");
       div.className = "form-check";
@@ -130,16 +155,19 @@
       catFilter.appendChild(div);
     });
 
+    // PHẦN 5: HÀM LỌC THEO DANH MỤC
     function filterByCategory(cat) {
       selectedCat = cat;
-      renderBooks();
+      renderProducts();
     }
 
+    // PHẦN 6: HÀM LỌC THEO GIÁ
     function filterByPrice(price) {
       selectedPrice = price;
-      renderBooks();
+      renderProducts();
     }
 
+    // PHẦN 7: HÀM ĐẶT LẠI BỘ LỌC
     function resetFilters() {
       selectedCat = "Tất cả";
       selectedPrice = "all";
@@ -149,26 +177,33 @@
       });
       // Reset price filter
       document.getElementById("price-all").checked = true;
-      renderBooks();
+      renderProducts();
     }
 
+    // PHẦN 8: HÀM CHUYỂN ĐỔI CHẾNH ĐỘ XEM (LƯỚI/DANH SÁCH)
     function setView(mode) {
       viewMode = mode;
       document.getElementById("btn-grid").className =
         mode === "grid" ? "btn btn-custom-primary" : "btn btn-outline-custom";
       document.getElementById("btn-list").className =
         mode === "list" ? "btn btn-custom-primary" : "btn btn-outline-custom";
-      renderBooks();
+      renderProducts();
     }
 
+    // PHẦN 9: HÀM LẤY SẢN PHẨM ĐÃ LỌC
+    // - Lọc theo danh mục
+    // - Lọc theo giá
+    // - Sắp xếp theo: mặc định, mới nhất, giá, đánh giá
     function getFiltered() {
-      let books = [...PRODUCTS];
-      if (selectedCat !== "Tất cả")
-        books = books.filter((b) => b.category === selectedCat);
+      let products = [...PRODUCTS];
 
-      // Apply price filter (single selection)
+      // Lọc theo danh mục
+      if (selectedCat !== "Tất cả")
+        products = products.filter((b) => b.category === selectedCat);
+
+      // Lọc theo khoảng giá
       if (selectedPrice !== "all") {
-        books = books.filter((b) => {
+        products = products.filter((b) => {
           switch (selectedPrice) {
             case 'under500k': return b.price < 500000;
             case '500k-1m': return b.price >= 500000 && b.price < 1000000;
@@ -179,37 +214,49 @@
         });
       }
 
+      // Sắp xếp sản phẩm
       const sort = document.getElementById("sort-select").value;
-      if (sort === "price-asc") books.sort((a, b) => a.price - b.price);
-      if (sort === "price-desc") books.sort((a, b) => b.price - a.price);
-      if (sort === "rating") books.sort((a, b) => b.rating - a.rating);
+      if (sort === "price-asc") products.sort((a, b) => a.price - b.price);
+      if (sort === "price-desc") products.sort((a, b) => b.price - a.price);
+      if (sort === "rating") products.sort((a, b) => b.rating - a.rating);
       if (sort === "newest")
-        books.sort((a, b) => new Date(b.addedDate) - new Date(a.addedDate));
-      return books;
+        products.sort((a, b) => new Date(b.addedDate) - new Date(a.addedDate));
+      return products;
     }
 
-    function renderBooks() {
+    // PHẦN 10: HÀM HIỂN THỊ SẢN PHẨM
+    // - Hiển thị lưới sản phẩm (grid mode)
+    // - Hoặc danh sách sản phẩm (list mode)
+    function renderProducts() {
       const filtered = getFiltered();
-      const grid = document.getElementById("books-grid");
+      const grid = document.getElementById("products-grid");
       const empty = document.getElementById("empty-msg");
+
+      // Cập nhật số lượng kết quả
       document.getElementById("result-count").textContent =
         `${filtered.length} kết quả`;
+
+      // Kiểm tra nếu không có sản phẩm
       if (filtered.length === 0) {
         grid.innerHTML = "";
         empty.classList.remove("d-none");
         return;
       }
       empty.classList.add("d-none");
+
+      // Hiển thị chế độ lưới (grid)
       if (viewMode === "grid") {
         grid.className = "row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4";
         grid.innerHTML = filtered.map((b) => renderBookCard(b)).join("");
-      } else {
+      }
+      // Hiển thị chế độ danh sách (list)
+      else {
         grid.className = "row row-cols-1 g-3";
         grid.innerHTML = filtered
           .map(
             (b) => `
         <div class="col">
-          <div class="card border-0 shadow-sm d-flex flex-row overflow-hidden book-card" style="height:130px">
+          <div class="card border-0 shadow-sm d-flex flex-row overflow-hidden product-card" style="height:130px">
             <img src="${b.cover}" style="width:90px;object-fit:cover" alt="${b.title}">
             <div class="card-body py-2 px-3 d-flex flex-column justify-content-between">
               <div>
@@ -234,7 +281,8 @@
       }
     }
 
-    renderBooks();
+    // PHẦN 11: KHỞI TẠO - HIỂN THỊ SẢN PHẨM LẦN ĐẦU TIÊN
+    renderProducts();
   </script>
 </body>
 

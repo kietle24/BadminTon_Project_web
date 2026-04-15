@@ -20,7 +20,7 @@ function renderNavbar(activePage) {
           <div class="d-flex align-items-center justify-content-between w-100 gap-3 gap-lg-4">
             <!-- Logo -->
             <div class="flex-shrink-0">
-              <a href="index.html" class="navbar-brand d-inline-block text-decoration-none">
+              <a href="/" class="navbar-brand d-inline-block text-decoration-none">
                 <img src="../IMG/logo1.png" alt="I-BAD Badminton Shop" style="max-height: 50px; width: auto;">
               </a>
             </div>
@@ -37,10 +37,10 @@ function renderNavbar(activePage) {
 
             <!-- Right Actions -->
             <div class="d-flex justify-content-end gap-2 gap-lg-4 align-items-center flex-shrink-0">
-              <a href="account.html" class="text-dark text-decoration-none d-flex flex-column align-items-center" style="font-size:12px; gap:3px;">
+              <a href="/account" class="text-dark text-decoration-none d-flex flex-column align-items-center" style="font-size:12px; gap:3px;">
                 <i class="bi bi-person fs-5"></i> <span class="d-none d-lg-inline">Tài khoản</span>
               </a>
-              <a href="cart.html" class="text-dark text-decoration-none d-flex flex-column align-items-center position-relative" style="font-size:12px; gap:3px;">
+              <a href="/cart" class="text-dark text-decoration-none d-flex flex-column align-items-center position-relative" style="font-size:12px; gap:3px;">
                 <i class="bi bi-cart3 fs-5"></i>
                 <span id="cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:10px; display:none;">0</span>
                 <span class="d-none d-lg-inline">Giỏ hàng</span>
@@ -55,25 +55,25 @@ function renderNavbar(activePage) {
         <div class="container">
           <ul class="nav justify-content-center py-2 flex-wrap" style="gap: 0;">
             <li class="nav-item">
-              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="categories.html?cat=Vợt+Cầu+Lông" style="font-size:13px; border-right: 1px solid rgba(255,255,255,0.2);">Vợt Cầu Lông</a>
+              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="/categories?cat=Vợt+Cầu+Lông" style="font-size:13px; border-right: 1px solid rgba(255,255,255,0.2);">Vợt Cầu Lông</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="categories.html?cat=Giày+Cầu+Lông" style="font-size:13px; border-right: 1px solid rgba(255,255,255,0.2);">Giày Cầu Lông</a>
+              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="/categories?cat=Giày+Cầu+Lông" style="font-size:13px; border-right: 1px solid rgba(255,255,255,0.2);">Giày Cầu Lông</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="categories.html?cat=Áo+Cầu+Lông" style="font-size:13px; border-right: 1px solid rgba(255,255,255,0.2);">Áo Cầu Lông</a>
+              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="/categories?cat=Áo+Cầu+Lông" style="font-size:13px; border-right: 1px solid rgba(255,255,255,0.2);">Áo Cầu Lông</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="categories.html?cat=Quần+Cầu+Lông" style="font-size:13px; border-right: 1px solid rgba(255,255,255,0.2);">Quần Cầu Lông</a>
+              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="/categories?cat=Quần+Cầu+Lông" style="font-size:13px; border-right: 1px solid rgba(255,255,255,0.2);">Quần Cầu Lông</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="categories.html?cat=Túi+Cầu+Lông" style="font-size:13px; border-right: 1px solid rgba(255,255,255,0.2);">Túi Cầu Lông</a>
+              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="/categories?cat=Túi+Cầu+Lông" style="font-size:13px; border-right: 1px solid rgba(255,255,255,0.2);">Túi Cầu Lông</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="categories.html?cat=Phụ+Kiện" style="font-size:13px; border-right: 1px solid rgba(255,255,255,0.2);">Phụ Kiện</a>
+              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="/categories?cat=Phụ+Kiện" style="font-size:13px; border-right: 1px solid rgba(255,255,255,0.2);">Phụ Kiện</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="contact.html" style="font-size:13px;">Liên Hệ</a>
+              <a class="nav-link text-white text-uppercase fw-bold px-3 py-2" href="/contact" style="font-size:13px;">Liên Hệ</a>
             </li>
           </ul>
         </div>
@@ -96,7 +96,7 @@ function renderFooter() {
 function handleSearch(e) {
   e.preventDefault();
   const q = document.getElementById('navbar-search').value.trim();
-  if (q) window.location.href = `categories.html?search=${encodeURIComponent(q)}`;
+  if (q) window.location.href = `/categories?search=${encodeURIComponent(q)}`;
 }
 
 // Global Add to Cart Handler - Available to all pages
@@ -130,20 +130,21 @@ function renderStars(rating) {
   const hasHalfStar = rating % 1 >= 0.5;
   let stars = '';
 
-  // Full stars
+  // Full stars (sao vàng đầy)
   for (let i = 0; i < fullStars; i++) {
     stars += '<span style="color:#ffc107; font-size:0.85rem;">★</span>';
   }
 
-  // Half star
+  // Half star (nửa sao vàng)
   if (hasHalfStar) {
     stars += '<span style="color:#ffc107; font-size:0.85rem;">⯨</span>';
   }
 
-  // Empty stars
-  const emptyStars = 5 - Math.ceil(rating);
+  // Empty stars (sao outline vàng)
+  const totalStarsDisplayed = fullStars + (hasHalfStar ? 1 : 0);
+  const emptyStars = 5 - totalStarsDisplayed;
   for (let i = 0; i < emptyStars; i++) {
-    stars += '<span style="color:#ddd; font-size:0.85rem;">★</span>';
+    stars += '<span style="color:#ffc107; font-size:0.85rem;">☆</span>';
   }
 
   return stars;
@@ -155,7 +156,7 @@ function renderBookCard(b) {
   const productData = { id: b.id, title: b.title, brand: b.brand, price: b.price, cover: b.cover };
   return `
     <div class="col">
-      <a href="products-detail.html?id=${b.id}" class="text-decoration-none">
+      <a href="/products/${b.id}" class="text-decoration-none">
         <div class="card b-card" style="cursor:pointer;transition:transform 0.2s;height:100%">
           <div class="img-wrapper position-relative">
             <img src="${b.cover}" alt="${b.title}">
@@ -184,3 +185,6 @@ function renderBookCard(b) {
     </div>
   `;
 }
+
+// Alias for consistency
+const renderProductCard = renderBookCard;

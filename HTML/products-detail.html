@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -40,8 +40,8 @@
   <div class="container py-4">
     <nav aria-label="breadcrumb" class="mb-3">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="index.html" style="color:#ff6633">Trang chủ</a></li>
-        <li class="breadcrumb-item"><a href="categories.html" style="color:#ff6633">Cửa hàng</a></li>
+        <li class="breadcrumb-item"><a href="/" style="color:#ff6633">Trang chủ</a></li>
+        <li class="breadcrumb-item"><a href="/categories" style="color:#ff6633">Cửa hàng</a></li>
         <li class="breadcrumb-item active" id="bc-title">Chi tiết sản phẩm</li>
       </ol>
     </nav>
@@ -71,7 +71,7 @@
       document.getElementById('book-content').innerHTML = `
       <div class="text-center py-5">
         <h3>Không tìm thấy sản phẩm</h3>
-        <a href="categories.html" class="btn btn-primary mt-3">Quay lại cửa hàng</a>
+        <a href="/categories" class="btn btn-primary mt-3">Quay lại cửa hàng</a>
       </div>`;
     } else {
       document.title = `${book.title} - I-BAD Badminton Shop`;

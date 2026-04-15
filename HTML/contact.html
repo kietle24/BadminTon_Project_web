@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="vi">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8" />
@@ -248,44 +248,20 @@
             background-color: #fafafa;
         }
 
-        /* Footer Styling */
-        footer {
-            background-color: #1a1a1a;
-            color: #fff;
-            margin-top: 80px;
-        }
-
-        footer .footer-section-title {
-            color: #fff;
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-            letter-spacing: 0.5px;
-        }
-
-        footer .footer-link {
+        /* Char count styling */
+        .char-count-hint {
+            color: #999;
+            margin-top: 5px;
             display: block;
-            color: #ccc;
-            font-size: 13px;
-            text-decoration: none;
-            margin-bottom: 8px;
-            transition: all 0.3s;
-            line-height: 1.8;
         }
 
-        footer .footer-link:hover {
-            color: #d95327;
-            padding-left: 5px;
-        }
-
-        footer .border-top {
-            border-color: rgba(255, 255, 255, 0.1) !important;
-        }
-
-        footer .text-muted {
-            color: #999 !important;
-            font-size: 12px;
+        /* Form message styling */
+        .form-message {
+            margin-top: 15px;
+            display: none;
+            padding: 12px;
+            border-radius: 5px;
+            text-align: center;
         }
     </style>
 </head>
@@ -387,7 +363,7 @@
                                 <textarea id="message" name="message" class="form-control"
                                     placeholder="Nhập nội dung cần hỗ trợ..." required
                                     onkeyup="updateCharCount(this)"></textarea>
-                                <small style="color: #999; margin-top: 5px; display: block;">
+                                <small class="char-count-hint">
                                     <span id="charCount">0</span>/10 ký tự tối thiểu
                                 </small>
                             </div>
@@ -395,9 +371,7 @@
                             <!-- Submit Button -->
                             <button type="submit" class="submit-btn">Gửi tin nhắn</button>
                         </form>
-                        <div id="formMessage"
-                            style="margin-top: 15px; display: none; padding: 12px; border-radius: 5px; text-align: center;">
-                        </div>
+                        <div id="formMessage" class="form-message"></div>
                     </div>
                 </div>
             </div>
