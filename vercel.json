@@ -1,30 +1,10 @@
 {
-    "buildCommand": "cp HTML/index.html index.html && cp -r HTML/* . && cp -r CSS . && cp -r JavaScript . && cp -r IMG .",
-    "outputDirectory": "./",
-    "redirects": [
+    "rewrites": [
         {
-            "source": "/account",
-            "destination": "/account.html"
-        },
-        {
-            "source": "/cart",
-            "destination": "/cart.html"
-        },
-        {
-            "source": "/categories",
-            "destination": "/categories.html"
-        },
-        {
-            "source": "/checkout",
-            "destination": "/checkout.html"
-        },
-        {
-            "source": "/contact",
-            "destination": "/contact.html"
-        },
-        {
-            "source": "/products-detail",
-            "destination": "/products-detail.html"
+            "source": "/(.*)",
+            "destination": "/HTML/index.html"
         }
-    ]
+    ],
+    "buildCommand": "",
+    "outputDirectory": "."
 }
