@@ -3,7 +3,31 @@
     "outputDirectory": ".",
     "rewrites": [
         {
-            "source": "/(?!HTML/|CSS/|JavaScript/|IMG/)",
+            "source": "/cart",
+            "destination": "/HTML/cart.html"
+        },
+        {
+            "source": "/checkout",
+            "destination": "/HTML/checkout.html"
+        },
+        {
+            "source": "/account",
+            "destination": "/HTML/account.html"
+        },
+        {
+            "source": "/categories",
+            "destination": "/HTML/categories.html"
+        },
+        {
+            "source": "/products/:id",
+            "destination": "/HTML/products-detail.html"
+        },
+        {
+            "source": "/contact",
+            "destination": "/HTML/contact.html"
+        },
+        {
+            "source": "/",
             "destination": "/HTML/index.html"
         }
     ]
