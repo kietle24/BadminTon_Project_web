@@ -1,10 +1,10 @@
 {
+    "buildCommand": "",
+    "outputDirectory": ".",
     "rewrites": [
         {
-            "source": "/(.*)",
+            "source": "/(?!HTML/|CSS/|JavaScript/|IMG/)",
             "destination": "/HTML/index.html"
         }
-    ],
-    "buildCommand": "",
-    "outputDirectory": "."
+    ]
 }
