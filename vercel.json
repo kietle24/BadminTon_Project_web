@@ -1,0 +1,51 @@
+{
+  "buildCommand": "echo 'Building static site'",
+  "outputDirectory": "./",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/HTML/index.html"
+    },
+    {
+      "source": "/(.*).html",
+      "destination": "/HTML/$1.html"
+    },
+    {
+      "source": "/account",
+      "destination": "/HTML/account.html"
+    },
+    {
+      "source": "/cart",
+      "destination": "/HTML/cart.html"
+    },
+    {
+      "source": "/categories",
+      "destination": "/HTML/categories.html"
+    },
+    {
+      "source": "/checkout",
+      "destination": "/HTML/checkout.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/HTML/contact.html"
+    },
+    {
+      "source": "/products-detail",
+      "destination": "/HTML/products-detail.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    }
+  ]
+}
