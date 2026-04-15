@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Liên Hệ - I-BAD Badminton Shop</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="../CSS/style.css" />
+    <style>
+        .contact-section {
+            padding: 60px 0;
+            background-color: #f8f9f9;
+        }
+
+        .contact-header {
+            background: linear-gradient(135deg, #d95327 0%, #c4421f 100%);
+            color: white;
+            padding: 50px 0;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .contact-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .contact-header p {
+            font-size: 18px;
+            opacity: 0.95;
+        }
+
+        .contact-info-box {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .contact-info-box:hover {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+            border-left-color: #d95327;
+            transform: translateX(5px);
+        }
+
+        .contact-info-icon {
+            width: 50px;
+            height: 50px;
+            background: #fff5f1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d95327;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .contact-info-content h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .contact-info-content p {
+            font-size: 14px;
+            color: #666;
+            margin: 5px 0;
+            line-height: 1.6;
+        }
+
+        .contact-form-box {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .contact-form-box h2 {
+            font-size: 22px;
+            margin-bottom: 30px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            transition: color 0.3s;
+        }
+
+        .form-group label .required {
+            color: #d95327;
+            margin-left: 2px;
+        }
+
+        .form-control:focus~label .required,
+        .form-control:not(:placeholder-shown)~label .required {
+            animation: pulse 0.5s ease;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .form-control {
+            border: 1px solid #ddd !important;
+            border-radius: 5px;
+            padding: 12px 15px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #d95327 !important;
+            box-shadow: 0 0 0 0.2rem rgba(217, 83, 39, 0.15) !important;
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: #999;
+        }
+
+        .form-control:invalid:not(:placeholder-shown) {
+            border-color: #dc3545 !important;
+        }
+
+        .form-control:valid:not(:placeholder-shown) {
+            border-color: #28a745 !important;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .row-two-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .submit-btn {
+            background: #d95327;
+            color: white;
+            padding: 14px 0;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background: #c4421f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(217, 83, 39, 0.3);
+        }
+
+        .submit-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .contact-header h1 {
+                font-size: 2rem;
+            }
+
+            .row-two-cols {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-form-box {
+                padding: 25px;
+            }
+
+            .contact-form-box h2 {
+                font-size: 18px;
+            }
+
+            .contact-info-box {
+                padding: 20px;
+                gap: 15px;
+            }
+        }
+
+        /* Message Alert Styling */
+        #formMessage {
+            font-weight: 500;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Input focus animation */
+        .form-control {
+            background-color: #ffffff;
+        }
+
+        .form-control:focus {
+            background-color: #fafafa;
+        }
+
+        /* Footer Styling */
+        footer {
+            background-color: #1a1a1a;
+            color: #fff;
+            margin-top: 80px;
+        }
+
+        footer .footer-section-title {
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        footer .footer-link {
+            display: block;
+            color: #ccc;
+            font-size: 13px;
+            text-decoration: none;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+            line-height: 1.8;
+        }
+
+        footer .footer-link:hover {
+            color: #d95327;
+            padding-left: 5px;
+        }
+
+        footer .border-top {
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        footer .text-muted {
+            color: #999 !important;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <!-- Contact Header Banner -->
+    <section class="contact-header">
+        <div class="container">
+            <h1>LIÊN HỆ VỚI CHÚNG TÔI</h1>
+            <p>Chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7</p>
+        </div>
+    </section>
+
+    <!-- Contact Content -->
+    <section class="contact-section">
+        <div class="container">
+            <div class="row">
+                <!-- Contact Info (Left Side) -->
+                <div class="col-lg-4 mb-5 mb-lg-0">
+                    <!-- Address -->
+                    <div class="contact-info-box">
+                        <div class="contact-info-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-info-content">
+                            <h3>Địa chỉ trụ sở</h3>
+                            <p>Số 17 Hoà Hưng, Phường 12, Quận 10, TP. HCM</p>
+                        </div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="contact-info-box">
+                        <div class="contact-info-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-info-content">
+                            <h3>Hotline</h3>
+                            <p>0368-123-456 (7:00 - 22:00)</p>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="contact-info-box">
+                        <div class="contact-info-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-info-content">
+                            <h3>Email</h3>
+                            <p>info@shopvnb.com<br>hotroline@shopvnb.com</p>
+                        </div>
+                    </div>
+
+                    <!-- Working Hours -->
+                    <div class="contact-info-box">
+                        <div class="contact-info-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="contact-info-content">
+                            <h3>Giờ làm việc</h3>
+                            <p>Thứ 2 - Chủ nhật: 7:00 - 22:00<br>Không nghỉ lễ, Tết</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form (Right Side) -->
+                <div class="col-lg-8">
+                    <div class="contact-form-box">
+                        <h2>Gửi tin nhắn cho chúng tôi</h2>
+                        <form id="contactForm" method="POST" action="#" onsubmit="handleFormSubmit(event)">
+                            <!-- Name and Phone Row -->
+                            <div class="row-two-cols">
+                                <div class="form-group">
+                                    <label for="fullname">Họ và tên <span class="required">*</span></label>
+                                    <input type="text" id="fullname" name="fullname" class="form-control"
+                                        placeholder="Nguyễn Văn A" minlength="3" onkeyup="validateName(this)"
+                                        onblur="resetInputStyle(this)" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Số điện thoại <span class="required">*</span></label>
+                                    <input type="tel" id="phone" name="phone" class="form-control"
+                                        placeholder="0912345678 hoặc +84912345678" pattern="(0|\+84)[0-9]{8,10}"
+                                        onkeyup="validatePhoneFormat(this)" onblur="resetInputStyle(this)" required>
+                                </div>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="form-group">
+                                <label for="email">Email <span class="required">*</span></label>
+                                <input type="email" id="email" name="email" class="form-control"
+                                    placeholder="email@example.com" onkeyup="validateEmail(this)"
+                                    onblur="resetInputStyle(this)" required>
+                            </div>
+
+                            <!-- Message -->
+                            <div class="form-group">
+                                <label for="message">Nội dung <span class="required">*</span></label>
+                                <textarea id="message" name="message" class="form-control"
+                                    placeholder="Nhập nội dung cần hỗ trợ..." required
+                                    onkeyup="updateCharCount(this)"></textarea>
+                                <small style="color: #999; margin-top: 5px; display: block;">
+                                    <span id="charCount">0</span>/10 ký tự tối thiểu
+                                </small>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="submit-btn">Gửi tin nhắn</button>
+                        </form>
+                        <div id="formMessage"
+                            style="margin-top: 15px; display: none; padding: 12px; border-radius: 5px; text-align: center;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../JavaScript/components.js"></script>
+
+    <script>
+        let formHasChanges = false;
+
+        // Initialize navbar and footer
+        document.addEventListener('DOMContentLoaded', function () {
+            renderNavbar('contact');
+            renderFooter();
+            initializeFormTracking();
+        });
+
+        // Track form changes
+        function initializeFormTracking() {
+            const form = document.getElementById('contactForm');
+            const inputs = form.querySelectorAll('input, textarea');
+
+            inputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    formHasChanges = true;
+                });
+            });
+
+            // Initialize character count
+            updateCharCount(document.getElementById('message'));
+        }
+
+        // Update character count for message field
+        function updateCharCount(textarea) {
+            const count = textarea.value.trim().length;
+            const charCountElement = document.getElementById('charCount');
+            if (charCountElement) {
+                charCountElement.textContent = count;
+                // Change color based on minimum requirement
+                if (count >= 10) {
+                    charCountElement.style.color = '#28a745';
+                } else if (count > 0) {
+                    charCountElement.style.color = '#ffc107';
+                } else {
+                    charCountElement.style.color = '#999';
+                }
+            }
+        }
+
+        // Validate phone format in real-time
+        function validatePhoneFormat(input) {
+            const value = input.value.trim();
+            if (!value) return;
+
+            const phoneRegex = /^(0|\+84)[0-9]{8,10}$/;
+            const cleanPhone = value.replace(/[^0-9+]/g, '');
+
+            if (phoneRegex.test(cleanPhone)) {
+                input.style.borderColor = '#28a745';
+            } else if (value.length > 5) {
+                input.style.borderColor = '#dc3545';
+            } else {
+                input.style.borderColor = '#ddd';
+            }
+        }
+
+        // Validate name field
+        function validateName(input) {
+            const value = input.value.trim();
+            if (value.length >= 3) {
+                input.style.borderColor = '#28a745';
+            } else if (value.length > 0) {
+                input.style.borderColor = '#dc3545';
+            } else {
+                input.style.borderColor = '#ddd';
+            }
+        }
+
+        // Reset input style when user leaves the field
+        function resetInputStyle(input) {
+            if (!input.value.trim()) {
+                input.style.borderColor = '';
+            }
+        }
+
+        // Validate email format
+        function validateEmail(input) {
+            const value = input.value.trim();
+            if (!value) return;
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (emailRegex.test(value)) {
+                input.style.borderColor = '#28a745';
+            } else if (value.length > 5) {
+                input.style.borderColor = '#dc3545';
+            } else {
+                input.style.borderColor = '#ddd';
+            }
+        }
+
+        // Warn user before leaving if form has unsaved changes
+        window.addEventListener('beforeunload', (e) => {
+            if (formHasChanges) {
+                e.preventDefault();
+                e.returnValue = 'Biểu mẫu chưa được gửi. Bạn có chắc muốn rời trang này?';
+                return e.returnValue;
+            }
+        });
+
+        // Handle form submission
+        function handleFormSubmit(event) {
+            event.preventDefault();
+
+            const formData = {
+                fullname: document.getElementById('fullname').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                message: document.getElementById('message').value.trim()
+            };
+
+            // Validate form data
+            if (!formData.fullname) {
+                showMessage('Vui lòng nhập họ và tên', 'error');
+                return;
+            }
+
+            if (!formData.phone) {
+                showMessage('Vui lòng nhập số điện thoại', 'error');
+                return;
+            }
+
+            if (!formData.email) {
+                showMessage('Vui lòng nhập email', 'error');
+                return;
+            }
+
+            if (!formData.message) {
+                showMessage('Vui lòng nhập nội dung tin nhắn', 'error');
+                return;
+            }
+
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(formData.email)) {
+                showMessage('Vui lòng nhập email hợp lệ', 'error');
+                return;
+            }
+
+            // Validate phone format (Vietnamese format: 10-11 digits)
+            const phoneRegex = /^(0|\+84)[0-9]{8,10}$/;
+            const cleanPhone = formData.phone.replace(/[^0-9+]/g, '');
+            if (!phoneRegex.test(cleanPhone)) {
+                showMessage('Vui lòng nhập số điện thoại hợp lệ (bắt đầu với 0 hoặc +84, 9-11 chữ số)', 'error');
+                return;
+            }
+
+            // Validate name (at least 3 characters)
+            if (formData.fullname.length < 3) {
+                showMessage('Họ và tên phải có ít nhất 3 ký tự', 'error');
+                return;
+            }
+
+            // Validate message length
+            if (formData.message.length < 10) {
+                showMessage('Nội dung tin nhắn phải có ít nhất 10 ký tự', 'error');
+                return;
+            }
+
+            // Proceed with submission
+            submitForm(formData);
+        }
+
+        function submitForm(formData) {
+            const submitBtn = document.querySelector('.submit-btn');
+            submitBtn.textContent = 'Đang gửi...';
+            submitBtn.disabled = true;
+
+            // Save to localStorage for demo
+            const contactHistory = JSON.parse(localStorage.getItem('contactHistory') || '[]');
+            contactHistory.push({
+                ...formData,
+                timestamp: new Date().toLocaleString('vi-VN')
+            });
+            // Keep only last 10 contacts
+            if (contactHistory.length > 10) {
+                contactHistory.shift();
+            }
+            localStorage.setItem('contactHistory', JSON.stringify(contactHistory));
+
+            // Simulate API call
+            setTimeout(() => {
+                showMessage('✓ Cảm ơn bạn! Chúng tôi đã nhận được tin nhắn và sẽ liên hệ với bạn sớm nhất.', 'success');
+                document.getElementById('contactForm').reset();
+                submitBtn.textContent = 'Gửi tin nhắn';
+                submitBtn.disabled = false;
+                formHasChanges = false;
+
+                // Optional: redirect after success
+                setTimeout(() => {
+                    // window.location.href = 'index.html';
+                }, 3000);
+            }, 1000);
+        }
+
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('formMessage');
+            messageDiv.textContent = message;
+            messageDiv.style.display = 'block';
+
+            if (type === 'success') {
+                messageDiv.style.background = '#d4edda';
+                messageDiv.style.color = '#155724';
+                messageDiv.style.border = '1px solid #c3e6cb';
+            } else {
+                messageDiv.style.background = '#f8d7da';
+                messageDiv.style.color = '#721c24';
+                messageDiv.style.border = '1px solid #f5c6cb';
+            }
+
+            // Scroll to message
+            messageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            // Hide message after 6 seconds for success, 5 for error
+            const duration = type === 'success' ? 6000 : 5000;
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, duration);
+        }
+    </script>
+</body>
+
+</html>
