@@ -5,17 +5,17 @@ const Cart = {
   saveItems(items) {
     localStorage.setItem('ibad_cart', JSON.stringify(items));
   },
-  addItem(book) {
+  addItem(product) {
     const items = this.getItems();
-    const existing = items.find(i => i.id === book.id);
+    const existing = items.find(i => i.id === product.id);
     if (existing) {
       existing.quantity += 1;
     } else {
-      items.push({ id: book.id, title: book.title, brand: book.brand, price: book.price, cover: book.cover, quantity: 1 });
+      items.push({ id: product.id, title: product.title, brand: product.brand, price: product.price, cover: product.cover, quantity: 1 });
     }
     this.saveItems(items);
     this.updateBadge();
-    this.showToast(book.title);
+    this.showToast(product.title);
   },
   removeItem(id) {
     const items = this.getItems().filter(i => i.id !== id);
