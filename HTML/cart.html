@@ -1,4 +1,24 @@
 <!doctype html>
+<!-- 
+  ================================================================
+  cart.html — Trang Giỏ Hàng I-BAD Badminton Shop
+  ================================================================
+  Cấu trúc trang:
+    1. Navbar (render động)
+    2. Tiêu đề + số lượng sản phẩm hiện tại
+    3. Nếu giỏ trống → hiện màn hình "Giỏ hàng trống" với nút mua sắm
+    4. Nếu giỏ có sản phẩm → hiện layout 2 cột:
+       - Cột trái (col-lg-8): Danh sách sản phẩm (nhành, tảng/giảm số lượng, xóa)
+       - Cột phải (col-lg-4): Tóm tắt đơn hàng (tạm tính, phí ship, tổng, freeship gợi ý, nút thanh toán)
+    5. Footer (render động)
+
+  Logic JS:
+    - Đọc giỏ hàng từ Cart.getItems() (localStorage)
+    - Tính phí ship: 0 nếu tổng >= 150.000đ, ngược lại 30.000đ
+    - Hiển gợi ý "mua thêm Xđ để freeship" nếu chưa đủ ngưỡng
+    - changeQty(), removeItem(), clearAll() → câp nhật localStorage và re-render
+  ================================================================
+-->
 <html lang="en">
 
 <head>
@@ -96,15 +116,17 @@
     renderNavbar("");
     renderFooter();
 
+    // Đọc giỏ hàng từ localStorage, tính phí ship và render toàn bộ trang giỏ hàng
+    // Phí ship: miễn phí nếu tổng >= 150.000đ, ngược lại 30.000đ
     function renderCartPage() {
       const items = Cart.getItems();
       const total = Cart.getTotal();
       const shipping = total >= 150000 ? 0 : 30000;
       const grandTotal = total + shipping;
 
-      document.getElementById("cart-count-label").textContent =
-        `${items.length} sản phẩm`;
+      document.getElementById("cart-count-label").textContent = `${items.length} sản phẩm`;
 
+      // Nếu giỏ trống → hiện màn hình "Giỏ hàng trống", ẩn nội dung chính
       if (items.length === 0) {
         document.getElementById("empty-cart").classList.remove("d-none");
         document.getElementById("cart-main").classList.add("d-none");
@@ -113,29 +135,24 @@
       document.getElementById("empty-cart").classList.add("d-none");
       document.getElementById("cart-main").classList.remove("d-none");
 
-      document.getElementById("subtotal-val").textContent =
-        formatPrice(total);
-      document.getElementById("shipping-val").textContent =
-        shipping === 0
-          ? '<span class="text-success">Miễn phí</span>'
-          : formatPrice(shipping);
+      // Cập nhật tạm tính, phí ship, tổng cộng
+      document.getElementById("subtotal-val").textContent = formatPrice(total);
       document.getElementById("shipping-val").innerHTML =
         shipping === 0
           ? '<span class="text-success fw-medium">Miễn phí</span>'
           : formatPrice(shipping);
-      document.getElementById("total-val").textContent =
-        formatPrice(grandTotal);
+      document.getElementById("total-val").textContent = formatPrice(grandTotal);
 
+      // Hiện gợi ý "mua thêm X để được freeship" nếu chưa đủ ngưỡng
       const noteEl = document.getElementById("free-ship-note");
       if (shipping > 0) {
         noteEl.classList.remove("d-none");
-        document.getElementById("more-to-free").textContent = formatPrice(
-          150000 - total,
-        );
+        document.getElementById("more-to-free").textContent = formatPrice(150000 - total);
       } else {
         noteEl.classList.add("d-none");
       }
 
+      // Render từng sản phẩm trong giỏ — có nút tăng/giảm số lượng và xóa
       const list = document.getElementById("cart-items-list");
       list.innerHTML = items
         .map(
@@ -165,16 +182,19 @@
         .join("");
     }
 
+    // Gọi khi bấm +/− số lượng — cập nhật localStorage rồi re-render
     function changeQty(id, qty) {
       Cart.updateQuantity(id, qty);
       renderCartPage();
     }
 
+    // Xóa 1 sản phẩm rồi re-render lại trang
     function removeItem(id) {
       Cart.removeItem(id);
       renderCartPage();
     }
 
+    // Xóa toàn bộ giỏ hàng sau khi xác nhận
     function clearAll() {
       if (confirm("Bạn có chắc muốn xóa tất cả sản phẩm trong giỏ hàng?")) {
         Cart.clearCart();

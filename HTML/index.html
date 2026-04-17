@@ -1,43 +1,73 @@
 <!doctype html>
 <html lang="en">
 
+<!--
+  ================================================================
+  index.html — Trang Chủ I-BAD Badminton Shop
+  ================================================================
+  Cấu trúc trang:
+    1. Navbar (render động từ components.js)
+    2. Slider banner (Swiper.js, 3 ảnh tự động chạy)
+    3. Section chính sách (4 ô: vận chuyển, chất lượng, thanh toán, đổi trả)
+    4. Sản Phẩm Nổi Bật (có tabs lọc theo danh mục, render 4 sản phẩm/tab)
+    5. Đang Giảm Giá (8 sản phẩm có giá giảm so với giá gốc)
+    6. Footer (render động từ components.js)
+  ================================================================
+-->
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>I-BAD Badminton Shop - Cửa Hàng Giá Rẻ Hàng Đầu</title>
+  <!-- SEO Title -->
+  <title>I-BAD Badminton Shop - Cửa Hàng Cầu Lông Giá Rẻ Hàng Đầu</title>
+  <!-- Bootstrap 5 CSS framework -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+  <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+  <!-- Swiper.js CSS — dùng cho banner slider -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <!-- Google Fonts: Playfair Display (tiêu đề) + Inter (nội dung) -->
   <link
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600;700&display=swap"
     rel="stylesheet" />
+  <!-- CSS tùy chỉnh riêng của dự án -->
   <link rel="stylesheet" href="../CSS/style.css" />
 </head>
 
 <body>
+  <!-- ===== NAVBAR (render động bởi renderNavbar() trong components.js) ===== -->
   <div id="navbar-placeholder"></div>
+
+  <!-- ===== BANNER SLIDER (Swiper.js, 3 slide, tự động loop) ===== -->
   <section class="section_slider">
     <div class="swiper mySwiper">
       <div class="swiper-wrapper">
+        <!-- Slide 1: Yonex Astrox 99 -->
         <div class="swiper-slide">
           <img src="https://cdn.shopvnb.com/img/1920x640/uploads/slider/yonex-astrox-99_1757731351.webp" alt="Banner 1">
         </div>
+        <!-- Slide 2: Lining 1000z -->
         <div class="swiper-slide">
           <img src="https://cdn.shopvnb.com/img/1920x640/uploads/slider/1000z-launch-website-banner_1695177885.webp"
             alt="Banner 2">
         </div>
+        <!-- Slide 3: Graphic Throttle -->
         <div class="swiper-slide">
           <img src="https://cdn.shopvnb.com/img/1920x640/uploads/slider/grpht-thrttl_1759089897.webp" alt="Banner 3">
         </div>
       </div>
+      <!-- Nút điều hướng slider -->
       <div class="swiper-button-next"></div>
       <div class="swiper-button-prev"></div>
+      <!-- Chấm phân trang slider -->
       <div class="swiper-pagination"></div>
     </div>
   </section>
 
+  <!-- ===== SECTION CHÍNH SÁCH (4 ô lợi ích của shop) ===== -->
   <section class="container policy-section">
     <div class="row g-3">
+      <!-- Chính sách 1: Vận chuyển toàn quốc -->
       <div class="col-6 col-lg-3">
         <div class="policy-box">
           <div class="policy-icon">
@@ -50,6 +80,7 @@
         </div>
       </div>
 
+      <!-- Chính sách 2: Bảo đảm chất lượng -->
       <div class="col-6 col-lg-3">
         <div class="policy-box">
           <div class="policy-icon">
@@ -62,6 +93,7 @@
         </div>
       </div>
 
+      <!-- Chính sách 3: Thanh toán đa phương thức -->
       <div class="col-6 col-lg-3">
         <div class="policy-box">
           <div class="policy-icon">
@@ -74,6 +106,7 @@
         </div>
       </div>
 
+      <!-- Chính sách 4: Đổi sản phẩm lỗi -->
       <div class="col-6 col-lg-3">
         <div class="policy-box">
           <div class="policy-icon">
@@ -88,20 +121,20 @@
     </div>
   </section>
 
-  <!-- Featured Products Section with Tabs -->
+  <!-- ===== SECTION SẢN PHẨM NỔI BẬT (có tabs lọc theo danh mục) ===== -->
   <section class="py-5 bg-white">
     <div class="container">
       <div class="section-title mb-4">
         <h2>Sản Phẩm Nổi Bật</h2>
       </div>
 
-      <!-- Category Tabs -->
+      <!-- Tabs danh mục — được render động bằng JS bên dưới -->
       <div class="category-filter mb-4" id="featured-tabs"></div>
 
-      <!-- Products Grid -->
+      <!-- Grid sản phẩm — cập nhật khi chuyển tab -->
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4" id="featured-products"></div>
 
-      <!-- View All Button -->
+      <!-- Nút xem tất cả → chuyển sang trang categories -->
       <div class="text-center mt-5">
         <a href="#" onclick="event.preventDefault(); navigateTo('categories.html');"
           class="btn btn-primary px-5 rounded-pill">Xem tất cả</a>
@@ -109,26 +142,35 @@
     </div>
   </section>
 
-  <!-- Đang Giảm Giá Section -->
+  <!-- ===== SECTION ĐANG GIẢM GIÁ (tự động lấy sp có giá < giá gốc) ===== -->
   <section class="py-5" style="background-color:#f5f1eb">
     <div class="container">
       <div class="section-title mb-5">
         <h2>Đang Giảm Giá</h2>
       </div>
+      <!-- Grid sản phẩm giảm giá — tối đa 8 sản phẩm -->
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4" id="sale-products"></div>
     </div>
   </section>
 
-  <!-- Danh Mục Sản Phẩm -->
-
+  <!-- ===== FOOTER (render động bởi renderFooter() trong components.js) ===== -->
   <div id="footer-placeholder"></div>
 
+  <!-- ===== SCRIPTS ===== -->
+  <!-- Bootstrap JS (bundle gồm Popper.js) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Swiper.js — dùng cho banner slider -->
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <!-- Dữ liệu sản phẩm tĩnh (mảng PRODUCTS) -->
   <script src="../JavaScript/products.js"></script>
+  <!-- Logic giỏ hàng (object Cart, lưu localStorage) -->
   <script src="../JavaScript/cart.js"></script>
+  <!-- Các hàm dùng chung: renderNavbar, renderFooter, renderProductCard... -->
   <script src="../JavaScript/components.js"></script>
+
   <script>
+    // ─── KHỞI TẠO SWIPER BANNER ──────────────────────────────
+    // loop: true → lặp vô hạn; có nút prev/next và chấm phân trang
     const swiper = new Swiper('.mySwiper', {
       loop: true,
       pagination: {
@@ -139,14 +181,17 @@
         prevEl: '.swiper-button-prev',
       },
     });
+
+    // ─── RENDER NAVBAR VÀ FOOTER ─────────────────────────────
     renderNavbar("home");
     renderFooter();
 
-    // Featured Products with Tabs
+    // ─── TABS SẢN PHẨM NỔI BẬT ──────────────────────────────
+    // Danh sách danh mục hiển thị trên tabs
     const FEATURED_CATEGORIES = ["Vợt Cầu Lông", "Giày Cầu Lông", "Áo Cầu Lông", "Quần Cầu Lông", "Túi Cầu Lông", "Phụ Kiện"];
-    let selectedFeaturedCat = "Vợt Cầu Lông";
+    let selectedFeaturedCat = "Vợt Cầu Lông"; // Danh mục mặc định khi tải trang
 
-    // Create category tabs
+    // Tạo nút tab cho từng danh mục và gắn sự kiện click
     const tabsContainer = document.getElementById("featured-tabs");
     FEATURED_CATEGORIES.forEach(cat => {
       const btn = document.createElement("button");
@@ -154,6 +199,7 @@
       btn.textContent = cat;
       btn.onclick = () => {
         selectedFeaturedCat = cat;
+        // Cập nhật class active cho tất cả tab buttons
         document.querySelectorAll(".category-filter-btn").forEach(b => {
           b.className = `btn btn-sm rounded-pill category-filter-btn ${b.textContent === cat ? "btn-primary" : "btn-outline-secondary"}`;
         });
@@ -162,19 +208,22 @@
       tabsContainer.appendChild(btn);
     });
 
+    // Lọc tối đa 4 sản phẩm theo danh mục đang được chọn và render vào grid
     function renderFeaturedProducts() {
       const featured = PRODUCTS.filter(b => b.category === selectedFeaturedCat).slice(0, 4);
       const grid = document.getElementById("featured-products");
       grid.innerHTML = featured.map(b => renderBookCard(b)).join("");
     }
 
-    // Render sale products without buttons
+    // ─── SECTION ĐANG GIẢM GIÁ ──────────────────────────────
+    // Lấy tối đa 8 sản phẩm có price < originalPrice (đang sale)
     function renderSaleProducts() {
       const saleProducts = PRODUCTS.filter(b => b.price < b.originalPrice).slice(0, 8);
       const grid = document.getElementById("sale-products");
       grid.innerHTML = saleProducts.map(b => renderBookCard(b)).join("");
     }
 
+    // ─── KHỞI TẠO KHI TRANG LOAD ────────────────────────────
     renderFeaturedProducts();
     renderSaleProducts();
   </script>

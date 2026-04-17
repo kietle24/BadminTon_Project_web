@@ -1,14 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<!--
+  ================================================================
+  products-detail.html — Trang Chi Tiết Sản Phẩm I-BAD
+  ================================================================
+  Cấu trúc trang:
+    1. Navbar (render động)
+    2. Breadcrumb điều hướng (Trang chủ > Cửa hàng > Tên sản phẩm)
+    3. Nội dung chi tiết sản phẩm (ảnh, giá, size, số lượng, nút mua/thêm giỏ)
+    4. Tabs: Thông tin chi tiết | Mô tả (render khác nhau theo category)
+    5. Section sản phẩm liên quan (cùng danh mục, tối đa 4 sp)
+    6. Footer (render động)
+
+  Cách hoạt động:
+    - Lấy id sản phẩm từ URL param ?id=... hoặc sessionStorage (phòng file://)
+    - Tra cứu trong mảng PRODUCTS (products.js)
+    - Render toàn bộ HTML vào #book-content bằng template string
+  ================================================================
+-->
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Title sẽ được cập nhật động theo tên sản phẩm bằng JS -->
   <title>Chi Tiết Sản Phẩm - I-BAD Badminton Shop</title>
+  <!-- Bootstrap 5 CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- CSS tùy chỉnh của dự án -->
   <link rel="stylesheet" href="../CSS/style.css">
+
   <style>
+    /* Hiệu ứng hover cho nút tab (Thông tin chi tiết / Mô tả) */
     .tab-btn {
       transition: all 0.3s ease;
     }
@@ -17,6 +42,7 @@
       opacity: 0.85;
     }
 
+    /* Animation fade-in khi chuyển tab nội dung */
     .tab-content {
       animation: fadeIn 0.3s ease;
     }
@@ -35,47 +61,66 @@
 
 <body>
 
+  <!-- ===== NAVBAR (render động) ===== -->
   <div id="navbar-placeholder"></div>
 
   <div class="container py-4">
+    <!-- ===== BREADCRUMB điều hướng ===== -->
     <nav aria-label="breadcrumb" class="mb-3">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#" onclick="event.preventDefault(); navigateTo('index.html');"
             style="color:#ff6633">Trang chủ</a></li>
         <li class="breadcrumb-item"><a href="#" onclick="event.preventDefault(); navigateTo('categories.html');"
             style="color:#ff6633">Cửa hàng</a></li>
+        <!-- Tên sản phẩm được cập nhật động bằng JS -->
         <li class="breadcrumb-item active" id="bc-title">Chi tiết sản phẩm</li>
       </ol>
     </nav>
 
+    <!-- ===== NỘI DUNG CHI TIẾT SẢN PHẨM (render động vào đây) ===== -->
     <div id="book-content"></div>
+
+    <!-- ===== SECTION SẢN PHẨM LIÊN QUAN (ẩn mặc định, hiện nếu có sản phẩm) ===== -->
     <div id="related-section" class="mt-5 d-none">
       <h4 class="fw-bold mb-4">Sản Phẩm Liên Quan</h4>
+      <!-- Grid 4 sản phẩm cùng danh mục -->
       <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4" id="related-books"></div>
     </div>
   </div>
 
+  <!-- ===== FOOTER (render động) ===== -->
   <div id="footer-placeholder"></div>
 
+  <!-- ===== SCRIPTS ===== -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Dữ liệu sản phẩm (mảng PRODUCTS) -->
   <script src="../JavaScript/products.js"></script>
+  <!-- Logic giỏ hàng -->
   <script src="../JavaScript/cart.js"></script>
+  <!-- Các hàm dùng chung: renderNavbar, navigateTo, formatPrice, renderProductCard... -->
   <script src="../JavaScript/components.js"></script>
+
   <script>
+    // ─── RENDER NAVBAR VÀ FOOTER ─────────────────────────────
     renderNavbar('shop');
     renderFooter();
 
+    // ─── LẤY ID SẢN PHẨM TỪ URL HOẶC SESSIONSTORAGE ────────
+    // Ưu tiên đọc từ URL param ?id=...
     const params = new URLSearchParams(window.location.search);
     let id = parseInt(params.get('id'));
 
-    // Fallback: check sessionStorage if ?id not in URL (for file:// protocol)
+    // Fallback: nếu không có ?id (mở file:// trực tiếp), đọc từ sessionStorage
+    // sessionStorage được ghi bởi navigateToProduct() trong components.js
     if (!id || isNaN(id)) {
       id = parseInt(sessionStorage.getItem('viewProductId'));
-      sessionStorage.removeItem('viewProductId'); // Clear after use
+      sessionStorage.removeItem('viewProductId'); // Xóa sau khi đọc để tránh lỗi lần sau
     }
 
+    // ─── TRA CỨU SẢN PHẨM TRONG MẢNG PRODUCTS ───────────────
     const product = PRODUCTS.find(p => p.id === id);
 
+    // ─── XỬ LÝ KHI KHÔNG TÌM THẤY SẢN PHẨM ─────────────────
     if (!product) {
       document.getElementById('book-content').innerHTML = `
       <div class="text-center py-5">
@@ -83,14 +128,20 @@
         <a href="#" onclick="event.preventDefault(); navigateTo('categories.html'); return false;" class="btn btn-primary mt-3">Quay lại cửa hàng</a>
       </div>`;
     } else {
+      // ─── CẬP NHẬT TITLE VÀ BREADCRUMB ────────────────────
       document.title = `${product.title} - I-BAD Badminton Shop`;
       document.getElementById('bc-title').textContent = product.title;
+
+      // Tính % giảm giá để hiển thị badge
       const discount = Math.round((1 - product.price / product.originalPrice) * 100);
 
+      // ─── RENDER HTML CHI TIẾT SẢN PHẨM ──────────────────
+      // Bao gồm: ảnh, badge, giá, ưu đãi, size selector, số lượng, nút mua/thêm giỏ, tabs thông tin
       document.getElementById('book-content').innerHTML = `
       <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
         <div class="card-body p-4">
           <div class="row g-4">
+            <!-- Cột ảnh sản phẩm -->
             <div class="col-md-4 text-center">
               <div class="position-relative d-inline-block">
                 <img src="${product.cover}" alt="${product.title}" class="img-fluid rounded-3 shadow" style="max-height:380px;object-fit:cover">
@@ -98,6 +149,7 @@
                 ${discount > 0 ? `<span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2">-${discount}%</span>` : ''}
               </div>
             </div>
+            <!-- Cột thông tin sản phẩm -->
             <div class="col-md-8">
               <small class="text-danger fw-bold">${product.brand}</small>
               <h2 class="fw-bold mb-2">${product.title}</h2>
@@ -106,12 +158,14 @@
                 <span class="text-warning">${renderStars(product.rating)} <strong>(${product.reviews})</strong></span>
                 <span class="text-success"><i class="bi bi-check-circle"></i> Còn hàng</span>
               </div>
+              <!-- Giá bán và giá gốc -->
               <div class="mb-3">
                 <span class="fs-1 fw-bold text-danger">${formatPrice(product.price)}</span>
                 ${product.originalPrice > product.price ? `<span class="text-muted text-decoration-line-through ms-2">${formatPrice(product.originalPrice)}</span>` : ''}
                 ${discount > 0 ? `<span class="badge bg-danger ms-2">-${discount}%</span>` : ''}
               </div>
 
+              <!-- Box ưu đãi cố định (tặng vớ, cam kết chính hãng, v.v.) -->
               <div class="border rounded-3 p-3 mb-4" style="background-color:#fef5e7;border-color:#f39c12 !important">
                 <div class="text-danger fw-bold mb-2">
                   <i class="bi bi-check-circle"></i> ƯU ĐÃI
@@ -124,6 +178,7 @@
                 </ul>
               </div>
 
+              <!-- Size selector — chỉ hiển thị nếu product.sizes tồn tại (áo, quần, giày) -->
               ${product.sizes ? `
               <div class="mb-4">
                 <div class="d-flex flex-wrap gap-2" id="size-selector">
@@ -134,10 +189,12 @@
                     </label>
                   `).join('')}
                 </div>
+                <!-- Lưu size đã chọn vào hidden input để đọc khi add to cart -->
                 <input type="hidden" id="selected-size" value="">
               </div>
               ` : ''}
 
+              <!-- Bộ chọn số lượng: nút −, input, nút + -->
               <div class="d-flex align-items-center gap-2 mb-3">
                 <label class="fw-bold">Số lượng:</label>
                 <button class="btn btn-outline-secondary qty-minus" style="width:40px;cursor:pointer">−</button>
@@ -145,6 +202,7 @@
                 <button class="btn btn-outline-secondary qty-plus" style="width:40px;cursor:pointer">+</button>
               </div>
 
+              <!-- Nút hành động: Mua ngay (→ checkout) và Thêm vào giỏ -->
               <div class="d-flex gap-2">
                 <button class="btn fw-bold flex-grow-1 rounded-2 buy-now-btn" style="background-color:#ffc107;color:#333;padding:12px;font-size:1rem;border:none;cursor:pointer">Mua ngay</button>
                 <button class="btn fw-bold flex-grow-1 rounded-2 add-to-cart-btn" style="background-color:#ff6633;color:white;padding:12px;font-size:1rem;border:none;cursor:pointer">
@@ -156,14 +214,15 @@
         </div>
       </div>
 
-      <!-- Product Details Tabs -->
+      <!-- ===== TABS THÔNG TIN CHI TIẾT / MÔ TẢ ===== -->
       <div class="card border-0 shadow-sm rounded-3 overflow-hidden mt-4">
         <div class="d-flex">
+          <!-- Tab đang active mặc định: Thông tin chi tiết -->
           <button class="tab-btn flex-grow-1 py-3 px-4 fw-bold border-0" style="background-color:#ff6633;color:white;font-size:1rem;cursor:pointer" data-tab="details">THÔNG TIN CHI TIẾT</button>
           <button class="tab-btn flex-grow-1 py-3 px-4 fw-bold border-0" style="background-color:#e8e8e8;color:#666;font-size:1rem;cursor:pointer" data-tab="description">MÔ TẢ</button>
         </div>
         <div class="p-4">
-          <!-- Details Tab -->
+          <!-- Tab: Thông tin chi tiết — bảng thông số kỹ thuật (khác nhau theo category) -->
           <div id="details" class="tab-content">
             ${(product.category === 'Vợt Cầu Lông' || product.category === 'Giày Cầu Lông') && product.specs ? `
             <h5 style="color:#333;margin-bottom:15px"><strong>Thông Số Kỹ Thuật</strong></h5>
@@ -215,6 +274,7 @@
               </tbody>
             </table>
             ` : `
+            <!-- Fallback: bảng thông tin cơ bản nếu không có specs chi tiết -->
             <table class="table table-borderless">
               <tbody>
                 <tr style="border-bottom:1px solid #eee">
@@ -242,7 +302,7 @@
             `}
           </div>
 
-          <!-- Description Tab -->
+          <!-- Tab: Mô tả — nội dung mô tả khác nhau theo từng category -->
           <div id="description" class="tab-content d-none">
             ${product.category === 'Vợt Cầu Lông' ? `
             <p style="line-height:1.8;color:#555">
@@ -325,6 +385,7 @@
               <li>✓ Thiết kế đẹp mắt, phù hợp cho vận động viên chuyên nghiệp và sở thích</li>
             </ul>
             ` : `
+            <!-- Fallback: mô tả chung cho Phụ Kiện -->
             <p style="line-height:1.8;color:#555">
               <strong>${product.title}</strong> của <strong>${product.brand}</strong> là phụ kiện cầu lông chất lượng cao, được chọn lọc kỹ lưỡng.
               Sản phẩm này giúp nâng cao trải nghiệm chơi cầu lông của bạn với tính năng chuyên dụng và thiết kế tối ưu.
@@ -345,22 +406,27 @@
         </div>
       </div>`;
 
+      // ─── RENDER SẢN PHẨM LIÊN QUAN ─────────────────────────
+      // Lọc tối đa 4 sản phẩm cùng danh mục, khác id hiện tại
       const related = PRODUCTS.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
       if (related.length > 0) {
         document.getElementById('related-section').classList.remove('d-none');
         document.getElementById('related-books').innerHTML = related.map(p => renderProductCard(p)).join('');
       }
 
-      // Event listeners for size selection
+      // ─── SỰ KIỆN CHỌN SIZE ──────────────────────────────────
+      // Khi click vào một size → đổi màu nền, lưu giá trị vào #selected-size
       if (product.sizes) {
         const sizeOptions = document.querySelectorAll('.size-option input[type="radio"]');
         sizeOptions.forEach(option => {
           option.addEventListener('change', (e) => {
+            // Reset style tất cả size buttons
             document.querySelectorAll('.size-option').forEach(btn => {
               btn.style.backgroundColor = '';
               btn.style.borderColor = '';
               btn.style.color = '';
             });
+            // Highlight size đang chọn
             e.target.parentElement.style.backgroundColor = '#ff6633';
             e.target.parentElement.style.borderColor = '#ff6633';
             e.target.parentElement.style.color = 'white';
@@ -369,7 +435,8 @@
         });
       }
 
-      // Event listeners for tab switching
+      // ─── SỰ KIỆN CHUYỂN TAB ─────────────────────────────────
+      // Click tab → ẩn tất cả .tab-content, hiện tab tương ứng, cập nhật màu nút
       const tabBtns = document.querySelectorAll('.tab-btn');
       tabBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -389,13 +456,14 @@
         });
       });
 
-      // Event listeners for quantity and buttons
+      // ─── SỰ KIỆN SỐ LƯỢNG VÀ NÚT MUA ───────────────────────
       const qtyInput = document.querySelector('.qty-input');
       const qtyMinus = document.querySelector('.qty-minus');
       const qtyPlus = document.querySelector('.qty-plus');
       const buyNowBtn = document.querySelector('.buy-now-btn');
       const addToCartBtn = document.querySelector('.add-to-cart-btn');
 
+      // Nút − giảm số lượng (tối thiểu là 1)
       if (qtyMinus) {
         qtyMinus.addEventListener('click', () => {
           const val = parseInt(qtyInput.value) || 1;
@@ -403,20 +471,24 @@
         });
       }
 
+      // Nút + tăng số lượng
       if (qtyPlus) {
         qtyPlus.addEventListener('click', () => {
           qtyInput.value = (parseInt(qtyInput.value) || 1) + 1;
         });
       }
 
+      // Nút "Mua ngay": thêm vào giỏ rồi chuyển thẳng đến checkout
       if (buyNowBtn) {
         buyNowBtn.addEventListener('click', () => {
+          // Bắt buộc chọn size nếu sản phẩm có size
           if (product.sizes && !document.getElementById('selected-size').value) {
             alert('Vui lòng chọn size sản phẩm');
             return;
           }
           const qty = parseInt(qtyInput.value) || 1;
           const size = document.getElementById('selected-size')?.value || null;
+          // Thêm từng đơn vị vào giỏ (mỗi lần gọi Cart.addItem sẽ tăng qty lên 1)
           for (let i = 0; i < qty; i++) {
             Cart.addItem({
               id: product.id,
@@ -428,10 +500,11 @@
             });
           }
           Cart.updateBadge();
-          navigateTo('checkout.html');
+          navigateTo('checkout.html'); // Chuyển thẳng đến trang thanh toán
         });
       }
 
+      // Nút "Thêm vào giỏ": thêm vào giỏ, hiện thông báo, reset số lượng và size
       if (addToCartBtn) {
         addToCartBtn.addEventListener('click', () => {
           if (product.sizes && !document.getElementById('selected-size').value) {
@@ -452,6 +525,7 @@
           }
           Cart.updateBadge();
           alert(`Đã thêm ${qty} sản phẩm vào giỏ hàng`);
+          // Reset về trạng thái ban đầu sau khi thêm
           qtyInput.value = 1;
           if (product.sizes) {
             document.querySelectorAll('.size-option').forEach(btn => {

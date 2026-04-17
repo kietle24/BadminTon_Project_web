@@ -1,4 +1,24 @@
 
+// =============================================================
+// products.js — Cơ sở dữ liệu sản phẩm (static, không có backend)
+//
+// Chứa toàn bộ danh sách sản phẩm của shop dưới dạng mảng PRODUCTS.
+// Mỗi sản phẩm có các field:
+//   - id          : ID duy nhất, dùng để điều hướng đến trang chi tiết
+//   - title       : Tên sản phẩm
+//   - brand       : Thương hiệu
+//   - price       : Giá bán hiện tại (VNĐ)
+//   - originalPrice: Giá gốc — dùng để tính % giảm giá
+//   - category    : Danh mục (Vợt / Giày / Áo / Quần / Túi / Phụ Kiện)
+//   - cover       : URL ảnh sản phẩm
+//   - rating      : Điểm đánh giá (0–5)
+//   - reviews     : Số lượt đánh giá
+//   - isNew       : Badge "MỚI"
+//   - isBestSeller: Badge "BÁN CHẠY"
+//   - sizes       : (tuỳ chọn) Các size có sẵn — áo/quần/giày
+//   - specs       : (tuỳ chọn) Thông số kỹ thuật — hiển thị ở trang chi tiết
+// =============================================================
+
 const PRODUCTS = [
   {
     id: 17,

@@ -1,15 +1,40 @@
 <!doctype html>
 <html lang="en">
 
+<!--
+  ================================================================
+  contact.html — Trang Liên Hệ I-BAD Badminton Shop
+  ================================================================
+  Cấu trúc trang:
+    1. Navbar (render động từ components.js)
+    2. Banner header (gradient cam, tiêu đề + mô tả)
+    3. Section liên hệ:
+       - Cột trái (col-lg-4): 4 box thông tin (địa chỉ, hotline, email, giờ làm)
+       - Cột phải (col-lg-8): Form gửi tin nhắn (họ tên, SĐT, email, nội dung)
+    4. Footer (render động)
+
+  Logic JS:
+    - Validate realtime từng trường input (name, phone, email, message)
+    - Đếm ký tự textarea (min 10 ký tự)
+    - Cảnh báo khi rời trang nếu form đã nhập nhưng chưa gửi
+    - Giả lập gửi form: lưu vào localStorage, hiện thông báo thành công
+  ================================================================
+-->
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- SEO Title -->
     <title>Liên Hệ - I-BAD Badminton Shop</title>
+    <!-- Bootstrap 5 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+    <!-- Google Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600;700&display=swap"
         rel="stylesheet" />
+    <!-- CSS tùy chỉnh của dự án -->
     <link rel="stylesheet" href="../CSS/style.css" />
     <style>
         .contact-section {
@@ -267,9 +292,10 @@
 </head>
 
 <body>
+    <!-- ===== NAVBAR (render động) ===== -->
     <div id="navbar-placeholder"></div>
 
-    <!-- Contact Header Banner -->
+    <!-- ===== BANNER ĐẦU TRANG (gradient cam, tiêu đề liên hệ) ===== -->
     <section class="contact-header">
         <div class="container">
             <h1>LIÊN HỆ VỚI CHÚNG TÔI</h1>
@@ -277,7 +303,7 @@
         </div>
     </section>
 
-    <!-- Contact Content -->
+    <!-- ===== NỘI DUNG LIÊN HỆ (2 cột: thông tin bên trái, form bên phải) ===== -->
     <section class="contact-section">
         <div class="container">
             <div class="row">
@@ -378,25 +404,30 @@
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- ===== FOOTER (render động) ===== -->
     <div id="footer-placeholder"></div>
 
-    <!-- Scripts -->
+    <!-- ===== SCRIPTS ===== -->
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery (chỉ dùng nếu cần, components.js không phụ thuộc) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Các hàm dùng chung: renderNavbar, renderFooter... -->
     <script src="../JavaScript/components.js"></script>
 
     <script>
+        // Biến theo dõi xem form có thay đổi chưa (dùng để cảnh báo khi rời trang)
         let formHasChanges = false;
 
-        // Initialize navbar and footer
+        // Khởi tạo navbar, footer và bắt đầu theo dõi form khi DOM đã sẵn sàng
         document.addEventListener('DOMContentLoaded', function () {
             renderNavbar('contact');
             renderFooter();
             initializeFormTracking();
         });
 
-        // Track form changes
+        // Theo dõi thay đổi trong form — đặt formHasChanges = true khi người dùng nhập liệu
+        // Dùng để kích hoạt cảnh báo beforeunload nếu chưa gửi form
         function initializeFormTracking() {
             const form = document.getElementById('contactForm');
             const inputs = form.querySelectorAll('input, textarea');
@@ -407,79 +438,80 @@
                 });
             });
 
-            // Initialize character count
+            // Khởi tạo bộ đếm ký tự cho textarea ngay khi load trang
             updateCharCount(document.getElementById('message'));
         }
 
-        // Update character count for message field
+        // Cập nhật số ký tự đã nhập cho textarea nội dung tin nhắn
+        // Màu: xanh lá (>=10), vàng (>0), xám (=0)
         function updateCharCount(textarea) {
             const count = textarea.value.trim().length;
             const charCountElement = document.getElementById('charCount');
             if (charCountElement) {
                 charCountElement.textContent = count;
-                // Change color based on minimum requirement
                 if (count >= 10) {
-                    charCountElement.style.color = '#28a745';
+                    charCountElement.style.color = '#28a745'; // Đủ ký tự tối thiểu → xanh
                 } else if (count > 0) {
-                    charCountElement.style.color = '#ffc107';
+                    charCountElement.style.color = '#ffc107'; // Chưa đủ → vàng
                 } else {
-                    charCountElement.style.color = '#999';
+                    charCountElement.style.color = '#999';    // Rỗng → xám
                 }
             }
         }
 
-        // Validate phone format in real-time
+        // Validate số điện thoại theo định dạng Việt Nam (bắt đầu 0 hoặc +84, 9-11 chữ số)
+        // Đổi màu border: xanh = hợp lệ, đỏ = sai, xám = chưa nhập đủ
         function validatePhoneFormat(input) {
             const value = input.value.trim();
             if (!value) return;
 
             const phoneRegex = /^(0|\+84)[0-9]{8,10}$/;
-            const cleanPhone = value.replace(/[^0-9+]/g, '');
+            const cleanPhone = value.replace(/[^0-9+]/g, ''); // Bỏ ký tự không phải số/+
 
             if (phoneRegex.test(cleanPhone)) {
-                input.style.borderColor = '#28a745';
+                input.style.borderColor = '#28a745'; // Hợp lệ
             } else if (value.length > 5) {
-                input.style.borderColor = '#dc3545';
+                input.style.borderColor = '#dc3545'; // Đã nhập nhiều nhưng sai định dạng
             } else {
-                input.style.borderColor = '#ddd';
+                input.style.borderColor = '#ddd';    // Đang nhập, chưa đủ để đánh giá
             }
         }
 
-        // Validate name field
+        // Validate họ và tên: phải có ít nhất 3 ký tự
         function validateName(input) {
             const value = input.value.trim();
             if (value.length >= 3) {
-                input.style.borderColor = '#28a745';
+                input.style.borderColor = '#28a745'; // Hợp lệ
             } else if (value.length > 0) {
-                input.style.borderColor = '#dc3545';
+                input.style.borderColor = '#dc3545'; // Quá ngắn
             } else {
-                input.style.borderColor = '#ddd';
+                input.style.borderColor = '#ddd';    // Rỗng
             }
         }
 
-        // Reset input style when user leaves the field
+        // Reset border color về mặc định nếu input rỗng khi người dùng rời trường
         function resetInputStyle(input) {
             if (!input.value.trim()) {
                 input.style.borderColor = '';
             }
         }
 
-        // Validate email format
+        // Validate định dạng email bằng regex (realtime khi gõ)
         function validateEmail(input) {
             const value = input.value.trim();
             if (!value) return;
 
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (emailRegex.test(value)) {
-                input.style.borderColor = '#28a745';
+                input.style.borderColor = '#28a745'; // Email hợp lệ
             } else if (value.length > 5) {
-                input.style.borderColor = '#dc3545';
+                input.style.borderColor = '#dc3545'; // Sai định dạng
             } else {
-                input.style.borderColor = '#ddd';
+                input.style.borderColor = '#ddd';    // Chưa đủ để đánh giá
             }
         }
 
-        // Warn user before leaving if form has unsaved changes
+        // Cảnh báo người dùng nếu form đã nhập nhưng chưa gửi và đang cố thoát trang
         window.addEventListener('beforeunload', (e) => {
             if (formHasChanges) {
                 e.preventDefault();
@@ -551,38 +583,41 @@
             submitForm(formData);
         }
 
+        // Xử lý gửi form thực tế (demo — không có backend thật)
+        // Lưu dữ liệu vào localStorage, giả lập delay API 1 giây, hiện kết quả
         function submitForm(formData) {
             const submitBtn = document.querySelector('.submit-btn');
             submitBtn.textContent = 'Đang gửi...';
             submitBtn.disabled = true;
 
-            // Save to localStorage for demo
+            // Lưu lịch sử liên hệ vào localStorage (tối đa 10 bản ghi)
             const contactHistory = JSON.parse(localStorage.getItem('contactHistory') || '[]');
             contactHistory.push({
                 ...formData,
                 timestamp: new Date().toLocaleString('vi-VN')
             });
-            // Keep only last 10 contacts
             if (contactHistory.length > 10) {
-                contactHistory.shift();
+                contactHistory.shift(); // Xóa bản ghi cũ nhất nếu vượt 10
             }
             localStorage.setItem('contactHistory', JSON.stringify(contactHistory));
 
-            // Simulate API call
+            // Giả lập API call với delay 1 giây
             setTimeout(() => {
                 showMessage('✓ Cảm ơn bạn! Chúng tôi đã nhận được tin nhắn và sẽ liên hệ với bạn sớm nhất.', 'success');
-                document.getElementById('contactForm').reset();
+                document.getElementById('contactForm').reset(); // Reset form về rỗng
                 submitBtn.textContent = 'Gửi tin nhắn';
                 submitBtn.disabled = false;
-                formHasChanges = false;
+                formHasChanges = false; // Reset flag để tắt cảnh báo beforeunload
 
-                // Optional: redirect after success
+                // (Tùy chọn) Có thể redirect sau khi gửi thành công
                 setTimeout(() => {
                     // window.location.href = 'index.html';
                 }, 3000);
             }, 1000);
         }
 
+        // Hiển thị thông báo kết quả (thành công/lỗi) và tự ẩn sau vài giây
+        // type: 'success' (xanh lá) hoặc 'error' (đỏ)
         function showMessage(message, type) {
             const messageDiv = document.getElementById('formMessage');
             messageDiv.textContent = message;
@@ -598,10 +633,10 @@
                 messageDiv.style.border = '1px solid #f5c6cb';
             }
 
-            // Scroll to message
+            // Cuộn mượt đến thông báo
             messageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-            // Hide message after 6 seconds for success, 5 for error
+            // Thành công: ẩn sau 6 giây; Lỗi: ẩn sau 5 giây
             const duration = type === 'success' ? 6000 : 5000;
             setTimeout(() => {
                 messageDiv.style.display = 'none';

@@ -1,10 +1,17 @@
+// Cart: quản lý toàn bộ logic giỏ hàng, lưu dữ liệu vào localStorage
 const Cart = {
+
+  // Lấy danh sách sản phẩm trong giỏ từ localStorage
   getItems() {
     return JSON.parse(localStorage.getItem('ibad_cart') || '[]');
   },
+
+  // Lưu danh sách sản phẩm vào localStorage
   saveItems(items) {
     localStorage.setItem('ibad_cart', JSON.stringify(items));
   },
+
+  // Thêm sản phẩm vào giỏ — nếu đã có thì tăng số lượng, chưa có thì thêm mới
   addItem(product) {
     const items = this.getItems();
     const existing = items.find(i => i.id === product.id);
@@ -17,11 +24,15 @@ const Cart = {
     this.updateBadge();
     this.showToast(product.title);
   },
+
+  // Xóa một sản phẩm khỏi giỏ theo id
   removeItem(id) {
     const items = this.getItems().filter(i => i.id !== id);
     this.saveItems(items);
     this.updateBadge();
   },
+
+  // Cập nhật số lượng của một sản phẩm — nếu qty <= 0 thì xóa luôn
   updateQuantity(id, qty) {
     if (qty <= 0) { this.removeItem(id); return; }
     const items = this.getItems();
@@ -30,16 +41,24 @@ const Cart = {
     this.saveItems(items);
     this.updateBadge();
   },
+
+  // Xóa toàn bộ giỏ hàng (dùng sau khi đặt hàng thành công)
   clearCart() {
     localStorage.removeItem('ibad_cart');
     this.updateBadge();
   },
+
+  // Tính tổng tiền của toàn bộ sản phẩm trong giỏ
   getTotal() {
     return this.getItems().reduce((sum, i) => sum + i.price * i.quantity, 0);
   },
+
+  // Đếm tổng số lượng sản phẩm trong giỏ (dùng cho badge Navbar)
   getCount() {
     return this.getItems().reduce((sum, i) => sum + i.quantity, 0);
   },
+
+  // Cập nhật số hiển thị trên icon giỏ hàng ở Navbar
   updateBadge() {
     const badge = document.getElementById('cart-badge');
     if (badge) {
@@ -48,6 +67,8 @@ const Cart = {
       badge.style.display = count > 0 ? 'inline-flex' : 'none';
     }
   },
+
+  // Hiện thông báo nhỏ (Toast) ở góc màn hình khi thêm sản phẩm thành công
   showToast(title) {
     let toast = document.getElementById('cart-toast');
     if (!toast) {
@@ -64,5 +85,5 @@ const Cart = {
   }
 };
 
-// Init badge on page load
+// Khi trang load xong, cập nhật badge ngay để hiển thị đúng số lượng từ localStorage
 document.addEventListener('DOMContentLoaded', () => Cart.updateBadge());

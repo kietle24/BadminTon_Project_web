@@ -1,4 +1,30 @@
 <!doctype html>
+<!--
+  ================================================================
+  checkout.html — Trang Thanh Toán I-BAD Badminton Shop
+  ================================================================
+  Quy trình đặt hàng gồm 3 bước (Step-by-Step):
+    Bước 1: Thông tin người nhận (tên, SĐT, email, địa chỉ, tỉnh/thành phố)
+    Bước 2: Phương thức vận chuyển (tiêu chuẩn miễn phí / nhanh 60.000đ)
+    Bước 3: Phương thức thanh toán (COD / chuyển khoản / MoMo / VNPay)
+
+  Cấu trúc trang:
+    1. Navbar (render động)
+    2. Thanh tiến trình 3 bước (step-circle, step-line, label)
+    3. #checkout-view: form 3 bước (chỉ hiện 1 bước tại 1 thời điểm)
+    4. #success-view: Màn hình đặt hàng thành công (thi tip, tóm tắt đơn, nút về trang chủ)
+    5. Cột phải (col-lg-4): Tóm tắt đơn hàng (sticky, cập nhật khi đổi phương thức ship)
+    6. Footer (render động)
+
+  Logic JS:
+    - Đọc giỏ hàng từ Cart.getItems()
+    - Tính phí ship: 0 nếu tổng >= 150.000đ
+    - goStep(n): chuyển bước, cập nhật thanh tiến trình
+    - updateStepBar(): đánh dấu done / active / inactive cho từng bước
+    - placeOrder(): xác nhận đặt hàng, xóa giỏ, hiện màn hình thành công
+    - Lưu ý: không có backend — đây chỉ là UI demo
+  ================================================================
+-->
 <html lang="en">
 
 <head>
@@ -228,43 +254,37 @@
     renderNavbar("");
     renderFooter();
 
+    // Đọc giỏ hàng và tính tổng tiền ngay khi trang load
     let currentStep = 1;
     const items = Cart.getItems();
     const subtotal = Cart.getTotal();
-    let shipping = subtotal >= 150000 ? 0 : 30000;
+    let shipping = subtotal >= 150000 ? 0 : 30000; // Freeship nếu >= 150.000đ
     let total = subtotal + shipping;
 
-    document.getElementById("standard-price").textContent =
-      shipping === 0 ? "Miễn phí" : formatPrice(shipping);
-    document.getElementById("sum-subtotal").textContent =
-      formatPrice(subtotal);
+    // Hiển thị tóm tắt đơn hàng bên phải ngay khi tải trang
+    document.getElementById("standard-price").textContent = shipping === 0 ? "Miễn phí" : formatPrice(shipping);
+    document.getElementById("sum-subtotal").textContent = formatPrice(subtotal);
     document.getElementById("sum-shipping").innerHTML =
-      shipping === 0
-        ? '<span class="text-success">Miễn phí</span>'
-        : formatPrice(shipping);
+      shipping === 0 ? '<span class="text-success">Miễn phí</span>' : formatPrice(shipping);
     document.getElementById("sum-total").textContent = formatPrice(total);
 
-    // Xử lý thay đổi phương thức vận chuyển
+    // Lắng nghe thay đổi phương thức vận chuyển — cập nhật phí ship và tổng tiền
     document.querySelectorAll('input[name="shipping"]').forEach(radio => {
       radio.addEventListener('change', function () {
         if (this.value === 'express') {
-          shipping = 60000; // Giao hàng nhanh luôn 60.000đ
+          shipping = 60000; // Giao hàng nhanh: cố định 60.000đ
         } else {
-          shipping = subtotal >= 150000 ? 0 : 30000; // Giao hàng tiêu chuẩn
+          shipping = subtotal >= 150000 ? 0 : 30000; // Giao tiêu chuẩn: có thể freeship
         }
         total = subtotal + shipping;
 
-        // Cập nhật hiển thị vận chuyển
         document.getElementById("sum-shipping").innerHTML =
-          shipping === 0
-            ? '<span class="text-success">Miễn phí</span>'
-            : formatPrice(shipping);
-
-        // Cập nhật tổng tiền
+          shipping === 0 ? '<span class="text-success">Miễn phí</span>' : formatPrice(shipping);
         document.getElementById("sum-total").textContent = formatPrice(total);
       });
     });
 
+    // Render danh sách sản phẩm trong khung tóm tắt đơn hàng (bên phải)
     document.getElementById("order-summary-items").innerHTML = items
       .map(
         (item) => `
@@ -279,13 +299,13 @@
       )
       .join("");
 
-    document
-      .getElementById("form-info")
-      .addEventListener("submit", function (e) {
-        e.preventDefault();
-        goStep(2);
-      });
+    // Khi submit form thông tin người nhận (Step 1) → chuyển sang Step 2
+    document.getElementById("form-info").addEventListener("submit", function (e) {
+      e.preventDefault();
+      goStep(2);
+    });
 
+    // Chuyển sang step n: ẩn step hiện tại, hiện step mới, cập nhật thanh tiến trình
     function goStep(n) {
       document.getElementById(`step${currentStep}`).classList.add("d-none");
       currentStep = n;
@@ -293,25 +313,22 @@
       updateStepBar();
     }
 
+    // Cập nhật giao diện thanh bước (1 → 2 → 3): active / done / inactive
     function updateStepBar() {
       for (let i = 1; i <= 3; i++) {
         const circle = document.getElementById(`step${i}-circle`);
         const label = document.getElementById(`step${i}-label`);
         if (i < currentStep) {
           circle.className = "step-circle done";
-          circle.innerHTML = '<i class="bi bi-check-lg"></i>';
+          circle.innerHTML = '<i class="bi bi-check-lg"></i>'; // Đã hoàn thành
         } else if (i === currentStep) {
           circle.className = "step-circle active";
           circle.textContent = i;
-          if (label) {
-            label.className = "d-block mt-1 text-primary fw-semibold";
-          }
+          if (label) label.className = "d-block mt-1 text-primary fw-semibold";
         } else {
           circle.className = "step-circle inactive";
           circle.textContent = i;
-          if (label) {
-            label.className = "d-block mt-1 text-muted";
-          }
+          if (label) label.className = "d-block mt-1 text-muted";
         }
       }
       for (let i = 1; i <= 2; i++) {
@@ -320,6 +337,8 @@
       }
     }
 
+    // Xác nhận đặt hàng: hiện màn hình thành công, xóa giỏ hàng
+    // Lưu ý: không có backend — đây chỉ là UI demo
     function placeOrder() {
       const name = document.getElementById("f-name").value;
       const phone = document.getElementById("f-phone").value;
@@ -327,7 +346,7 @@
       const city = document.getElementById("f-city").value;
       document.getElementById("success-info").innerHTML =
         `Người nhận: ${name}<br>Điện thoại: ${phone}<br>Địa chỉ: ${address}, ${city}<br>Tổng tiền: ${formatPrice(total)}`;
-      Cart.clearCart();
+      Cart.clearCart(); // Xóa giỏ hàng sau khi đặt hàng
       document.getElementById("checkout-view").classList.add("d-none");
       document.getElementById("success-view").classList.remove("d-none");
       document.getElementById("steps-bar").classList.add("d-none");

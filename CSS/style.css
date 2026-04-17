@@ -1000,7 +1000,9 @@ footer h5 {
   }
 }
 
-/* ---- Custom Button ---- */
+/* ===== NÚT CUSTOM BỔ SUNG (.btn-orange) =====
+   Màu cam chủ đạo, dùng ở một số trang cũ trước khi chuyển sang .btn-custom-primary
+   Giữ lại để tương thích ngược */
 .btn-orange {
   background-color: #d95327;
   border-color: #d95327;
@@ -1076,7 +1078,7 @@ footer h5 {
   margin-left: 5px;
 }
 
-/* ---- Brand Category Cards ---- */
+/* ===== BRAND CATEGORY CARDS (trang danh mục thương hiệu) ===== */
 .brand-category-card {
   border: 1px solid #f0f0f0 !important;
   transition: all 0.3s ease;
@@ -1402,7 +1404,7 @@ footer h5 {
   font-size: 1.8rem;
 }
 
-/* ---- Page title bar ---- */
+/* ===== PAGE TITLE BAR (thanh tiêu đề trên cùng ở cart.html, checkout.html) ===== */
 .page-title-bar {
   background: #fff;
   border-bottom: 1px solid #f3f4f6;
@@ -1540,7 +1542,8 @@ footer h5 {
   color: #d95327;
 }
 
-/* ---- Custom Button Colors ---- */
+/* ===== CÁC NÚT CUSTOM CHÍNH (thay thế màu Bootstrap mặc định bằng màu cam thương hiệu) ===== */
+/* .btn-custom-primary: nút cam đặc (CTA chính — thêm giỏ, thanh toán, v.v.) */
 .btn-custom-primary {
   background-color: #d95327;
   border-color: #d95327;
@@ -1591,7 +1594,7 @@ footer h5 {
   transform: scale(1.08);
 }
 
-/* ---- Blog card ---- */
+/* ===== STEP-BY-STEP CHECKOUT (thanh tiến trình 3 bước ở checkout.html) ===== */
 .blog-card {
   border-radius: 10px;
   overflow: hidden;

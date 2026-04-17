@@ -1,4 +1,23 @@
 <!doctype html>
+<!--
+  ================================================================
+  account.html — Trang Tài Khoản I-BAD Badminton Shop
+  ================================================================
+  Cấu trúc trang:
+    1. Navbar (render động)
+    2. Form căn giữa màn hình (max-width 440px) gồm 2 tabs:
+       - Tab "Đăng Nhập": email + mật khẩu + "Ghi nhớ" + "Quên mật khẩu"
+       - Tab "Đăng Ký": họ tên + email + SĐT + mật khẩu + xác nhận mật khẩu + điều khoản
+    3. Alert thành công (dùng chung cho cả 2 form, tự ẩn sau 4 giây)
+    4. Footer (render động)
+
+  Logic JS:
+    - switchTab(tab): chuyển giữa tab đăng nhập / đăng ký
+    - togglePwd(inputId, btn): ẩn/hiện mật khẩu
+    - handleLogin(e): giả lập đăng nhập (chỉ UI demo, không có xác thực thật)
+    - handleRegister(e): kiểm tra mật khẩu khớp, giả lập đăng ký
+  ================================================================
+-->
 <html lang="en">
 
 <head>
@@ -140,22 +159,17 @@
     renderNavbar("");
     renderFooter();
 
+    // Chuyển đổi giữa tab "Đăng Nhập" và "Đăng Ký"
+    // Ẩn/hiện form tương ứng, cập nhật trạng thái active của tab button
     function switchTab(tab) {
-      document
-        .getElementById("login-form")
-        .classList.toggle("d-none", tab !== "login");
-      document
-        .getElementById("register-form")
-        .classList.toggle("d-none", tab !== "register");
-      document
-        .getElementById("tab-login")
-        .classList.toggle("active", tab === "login");
-      document
-        .getElementById("tab-register")
-        .classList.toggle("active", tab === "register");
-      document.getElementById("success-alert").classList.add("d-none");
+      document.getElementById("login-form").classList.toggle("d-none", tab !== "login");
+      document.getElementById("register-form").classList.toggle("d-none", tab !== "register");
+      document.getElementById("tab-login").classList.toggle("active", tab === "login");
+      document.getElementById("tab-register").classList.toggle("active", tab === "register");
+      document.getElementById("success-alert").classList.add("d-none"); // Ẩn alert cũ khi chuyển tab
     }
 
+    // Hiện thông báo thành công trong 4 giây rồi tự ẩn
     function showSuccess(msg) {
       const el = document.getElementById("success-alert");
       document.getElementById("success-msg").textContent = msg;
@@ -163,20 +177,21 @@
       setTimeout(() => el.classList.add("d-none"), 4000);
     }
 
+    // Toggle hiện/ẩn mật khẩu — đổi type input và icon mắt
     function togglePwd(inputId, btn) {
       const input = document.getElementById(inputId);
       const isHidden = input.type === "password";
       input.type = isHidden ? "text" : "password";
-      btn.innerHTML = isHidden
-        ? '<i class="bi bi-eye-slash"></i>'
-        : '<i class="bi bi-eye"></i>';
+      btn.innerHTML = isHidden ? '<i class="bi bi-eye-slash"></i>' : '<i class="bi bi-eye"></i>';
     }
 
+    // Xử lý đăng nhập — hiện thị thành công (demo UI, không có xác thực thật)
     function handleLogin(e) {
       e.preventDefault();
       showSuccess("Đăng nhập thành công! Chào mừng bạn trở lại I-BAD Badminton Shop.");
     }
 
+    // Xử lý đăng ký — kiểm tra mật khẩu khớp trước khi hiện thông báo
     function handleRegister(e) {
       e.preventDefault();
       const pwd = document.getElementById("reg-pwd").value;
@@ -185,9 +200,7 @@
         alert("Mật khẩu xác nhận không khớp!");
         return;
       }
-      showSuccess(
-        "Tạo tài khoản thành công! Chào mừng bạn đến với I-BAD Badminton Shop.",
-      );
+      showSuccess("Tạo tài khoản thành công! Chào mừng bạn đến với I-BAD Badminton Shop.");
     }
   </script>
 </body>
